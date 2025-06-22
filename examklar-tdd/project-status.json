@@ -1,0 +1,9 @@
+{
+  "project_name": "ExamKlar - React TDD Project",
+  "last_update": "2025-06-23T01:07:51.633365",
+  "last_action": "APP FRAME FIXED: Removed display:flex from body CSS that was constraining app width. App now takes full browser width instead of being left-aligned in a flex container.",
+  "status": "active",
+  "context_system": "tdd-focused",
+  "methodology": "test-driven-development",
+  "instructions": "Always run 'python3 update_context.py \"action\"' after any action"
+}
