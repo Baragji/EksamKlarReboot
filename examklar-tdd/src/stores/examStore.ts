@@ -13,6 +13,7 @@ interface ExamStore {
   currentSubject: Subject | null
   studyPlan: StudyPlan | null
   progress: Progress | null
+  onboardingCompleted: boolean
   
   // Actions
   setUser: (user: User) => void
@@ -21,6 +22,7 @@ interface ExamStore {
   setCurrentSubject: (subject: Subject) => void
   updateStudyPlan: (plan: StudyPlan) => void
   updateProgress: (progress: Progress) => void
+  completeOnboarding: () => void
   
   // Computed getters
   getUpcomingDeadlines: () => Subject[]
@@ -36,7 +38,8 @@ const initialState = {
   subjects: [],
   currentSubject: null,
   studyPlan: null,
-  progress: null
+  progress: null,
+  onboardingCompleted: false
 }
 
 /**
@@ -97,6 +100,9 @@ export const useExamStore = create<ExamStore>()(
           const state = get()
           return state.studyPlan?.dailyGoalMinutes || 30
         },
+        
+        // Onboarding management
+        completeOnboarding: () => set({ onboardingCompleted: true }, false, 'completeOnboarding'),
         
         // Utility functions
         reset: () => set(initialState, false, 'reset')

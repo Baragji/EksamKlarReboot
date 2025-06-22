@@ -71,29 +71,72 @@ export interface Flashcard {
   front: string
   back: string
   difficulty: 'easy' | 'medium' | 'hard'
-  lastReviewed?: Date
-  nextReview?: Date
-  repetitions: number
-  easinessFactor: number
+  tags: string[]
+  lastReviewed: Date
+  nextReview: Date
+  correctStreak: number
+  totalReviews: number
+  subjectId?: string
+  createdAt?: Date
+}
+
+export interface FlashcardSession {
+  id: string
+  flashcardIds: string[]
+  startedAt: Date
+  completedAt?: Date
+  totalCards: number
+  correctCards: number
+  incorrectCards: number
+  timeSpent: number // in seconds
 }
 
 export interface Quiz {
   id: string
-  subjectId: string
+  subjectId?: string
   title: string
   description: string
   questions: QuizQuestion[]
-  timeLimit?: number
-  createdAt: Date
+  timeLimit?: number // in seconds
+  passingScore: number // percentage
+  createdAt?: Date
 }
 
 export interface QuizQuestion {
   id: string
   question: string
-  type: 'multiple-choice' | 'true-false' | 'short-answer'
-  options?: string[]
-  correctAnswer: number | string
+  options: string[]
+  correctAnswer: number // index of correct option
   explanation?: string
+  difficulty: 'easy' | 'medium' | 'hard'
+  points: number
+}
+
+export interface QuizAnswer {
+  questionId: string
+  selectedAnswer: number
+  isCorrect: boolean
+  timeSpent: number
+}
+
+export interface QuizResult {
+  quizId: string
+  score: number // percentage
+  totalQuestions: number
+  correctAnswers: number
+  incorrectAnswers: number
+  timeSpent: number // in seconds
+  passed: boolean
+  answers: QuizAnswer[]
+  completedAt?: Date
+}
+
+export interface QuizHistory {
+  quizId: string
+  score: number
+  passed: boolean
+  completedAt: Date
+  timeSpent: number
 }
 
 export interface StudySession {
