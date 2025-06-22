@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react'
 import type { Quiz, QuizHistory, QuizResult } from '../types'
 import { Button } from './ui/Button'
 import { Input } from './ui/Input'
+import { Quiz as QuizComponent } from './Quiz'
 
 interface QuizEngineProps {
   quizzes: Quiz[]
@@ -82,15 +83,10 @@ export const QuizEngine: React.FC<QuizEngineProps> = ({
 
   if (viewMode === 'quiz' && activeQuiz) {
     return (
-      <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Quiz Active</h2>
-          <p className="text-lg mb-4">Quiz component will be implemented here</p>
-          <Button onClick={() => setActiveQuiz(null)} variant="secondary">
-            Back to Quiz List
-          </Button>
-        </div>
-      </div>
+      <QuizComponent 
+        quiz={activeQuiz}
+        onComplete={handleQuizComplete}
+      />
     )
   }
 

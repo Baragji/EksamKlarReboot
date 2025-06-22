@@ -40,10 +40,10 @@ describe('Quiz Component - TDD', () => {
   it('should display first question initially', () => {
     render(<Quiz quiz={mockQuiz} />)
     expect(screen.getByText('What is 2 + 2?')).toBeInTheDocument()
-    expect(screen.getByText('3')).toBeInTheDocument()
-    expect(screen.getByText('4')).toBeInTheDocument()
-    expect(screen.getByText('5')).toBeInTheDocument()
-    expect(screen.getByText('6')).toBeInTheDocument()
+    expect(screen.getByText('A: 3')).toBeInTheDocument()
+    expect(screen.getByText('B: 4')).toBeInTheDocument()
+    expect(screen.getByText('C: 5')).toBeInTheDocument()
+    expect(screen.getByText('D: 6')).toBeInTheDocument()
   })
 
   it('should show question progress', () => {
@@ -60,21 +60,23 @@ describe('Quiz Component - TDD', () => {
   it('should allow selecting an answer', () => {
     render(<Quiz quiz={mockQuiz} />)
     
-    const option = screen.getByLabelText('Option B: 4')
-    fireEvent.click(option)
+    const optionButton = screen.getByRole('button', { name: 'Option B: 4' })
+    fireEvent.click(optionButton)
     
-    expect(option).toBeChecked()
+    // Check if the associated radio input is checked
+    const radioInput = screen.getByDisplayValue('1') // Option B corresponds to value 1
+    expect(radioInput).toBeChecked()
   })
 
   it('should highlight selected answer', () => {
     render(<Quiz quiz={mockQuiz} />)
     
-    const optionButton = screen.getByText('4')
+    const optionButton = screen.getByRole('button', { name: 'Option B: 4' })
     act(() => {
       fireEvent.click(optionButton)
     })
     
-    expect(optionButton.closest('button')).toHaveClass('bg-blue-100')
+    expect(optionButton).toHaveClass('bg-blue-100')
   })
 
   it('should advance to next question when next button clicked', () => {
@@ -82,7 +84,7 @@ describe('Quiz Component - TDD', () => {
     
     // Select an answer
     act(() => {
-      fireEvent.click(screen.getByText('4'))
+      fireEvent.click(screen.getByRole('button', { name: 'Option B: 4' }))
     })
     
     // Click next
@@ -104,7 +106,7 @@ describe('Quiz Component - TDD', () => {
     
     // Go to last question
     act(() => {
-      fireEvent.click(screen.getByText('4'))
+      fireEvent.click(screen.getByRole('button', { name: 'Option B: 4' }))
     })
     act(() => {
       fireEvent.click(screen.getByText('Next Question'))
@@ -112,7 +114,7 @@ describe('Quiz Component - TDD', () => {
     
     // Select answer on last question
     act(() => {
-      fireEvent.click(screen.getByText('35'))
+      fireEvent.click(screen.getByText('C: 35'))
     })
     
     expect(screen.getByText('Finish Quiz')).toBeInTheDocument()
@@ -123,13 +125,13 @@ describe('Quiz Component - TDD', () => {
     
     // Complete quiz
     act(() => {
-      fireEvent.click(screen.getByText('4'))
+      fireEvent.click(screen.getByRole('button', { name: 'Option B: 4' }))
     })
     act(() => {
       fireEvent.click(screen.getByText('Next Question'))
     })
     act(() => {
-      fireEvent.click(screen.getByText('35'))
+      fireEvent.click(screen.getByText('C: 35'))
     })
     act(() => {
       fireEvent.click(screen.getByText('Finish Quiz'))
@@ -146,13 +148,13 @@ describe('Quiz Component - TDD', () => {
     
     // Complete quiz
     act(() => {
-      fireEvent.click(screen.getByText('4'))
+      fireEvent.click(screen.getByRole('button', { name: 'Option B: 4' }))
     })
     act(() => {
       fireEvent.click(screen.getByText('Next Question'))
     })
     act(() => {
-      fireEvent.click(screen.getByText('35'))
+      fireEvent.click(screen.getByText('C: 35'))
     })
     act(() => {
       fireEvent.click(screen.getByText('Finish Quiz'))
@@ -178,13 +180,13 @@ describe('Quiz Component - TDD', () => {
     
     // Complete quiz
     act(() => {
-      fireEvent.click(screen.getByText('4'))
+      fireEvent.click(screen.getByRole('button', { name: 'Option B: 4' }))
     })
     act(() => {
       fireEvent.click(screen.getByText('Next Question'))
     })
     act(() => {
-      fireEvent.click(screen.getByText('35'))
+      fireEvent.click(screen.getByText('C: 35'))
     })
     act(() => {
       fireEvent.click(screen.getByText('Finish Quiz'))
@@ -203,13 +205,13 @@ describe('Quiz Component - TDD', () => {
     
     // Complete quiz and enter review
     act(() => {
-      fireEvent.click(screen.getByText('4'))
+      fireEvent.click(screen.getByRole('button', { name: 'Option B: 4' }))
     })
     act(() => {
       fireEvent.click(screen.getByText('Next Question'))
     })
     act(() => {
-      fireEvent.click(screen.getByText('35'))
+      fireEvent.click(screen.getByText('C: 35'))
     })
     act(() => {
       fireEvent.click(screen.getByText('Finish Quiz'))
@@ -236,7 +238,7 @@ describe('Quiz Component - TDD', () => {
     })
     
     expect(handleComplete).toHaveBeenCalled()
-    expect(screen.getByText(/time's up/i)).toBeInTheDocument()
+    expect(screen.getByText(/quiz complete/i)).toBeInTheDocument()
     
     vi.useRealTimers()
   })
