@@ -1,6 +1,6 @@
 const DashboardPage = () => {
   return (
-    <main className="py-8">
+    <div className="py-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-6">
         Dashboard
       </h1>
@@ -23,7 +23,7 @@ const DashboardPage = () => {
         <h2 className="text-xl font-semibold mb-4">Study Overview</h2>
         <p className="text-gray-600">Overview of your current study status</p>
       </div>
-    </main>
+    </div>
   )
 }
 

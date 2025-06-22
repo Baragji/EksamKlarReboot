@@ -1,6 +1,6 @@
 const OnboardingPage = () => {
   return (
-    <main className="text-center py-12">
+    <div className="text-center py-12">
       <h1 className="text-4xl font-bold text-gray-900 mb-4">
         Welcome to ExamKlar
       </h1>
@@ -12,7 +12,7 @@ const OnboardingPage = () => {
           Get started with your personalized exam preparation journey
         </p>
       </div>
-    </main>
+    </div>
   )
 }
 

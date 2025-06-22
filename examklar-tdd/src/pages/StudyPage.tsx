@@ -1,6 +1,6 @@
 const StudyPage = () => {
   return (
-    <main className="py-8">
+    <div className="py-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-6">
         Study Session
       </h1>
@@ -24,7 +24,7 @@ const StudyPage = () => {
           </div>
         </div>
       </div>
-    </main>
+    </div>
   )
 }
 

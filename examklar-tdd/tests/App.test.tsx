@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, it, expect } from 'vitest'
-import App from '../../src/App'
+import App from '../src/App'
 
 describe('App Routing - TDD', () => {
   it('should render onboarding page on root route', () => {
@@ -103,6 +103,8 @@ describe('App Routing - TDD', () => {
     
     // Should redirect to onboarding if not set up
     // This test will be implemented when we have auth state
-    expect(screen.getByRole('main')).toBeInTheDocument()
+    // Check that we have exactly one main element (from Layout)
+    const mainElements = screen.getAllByRole('main')
+    expect(mainElements).toHaveLength(1)
   })
 })
