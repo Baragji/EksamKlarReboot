@@ -170,6 +170,11 @@ describe('StudyProgressDashboard Component - TDD', () => {
     
     // Check for charts section
     expect(screen.getByText('Progress Trends')).toBeInTheDocument()
-    expect(screen.getByLabelText('Progress chart container')).toBeInTheDocument()
+    expect(screen.getByTestId('progress-charts-container')).toBeInTheDocument()
+    
+    // Check for individual chart components
+    expect(screen.getByTestId('weekly-study-chart')).toBeInTheDocument()
+    expect(screen.getByTestId('subject-progress-chart')).toBeInTheDocument()
+    expect(screen.getByTestId('monthly-trend-chart')).toBeInTheDocument()
   })
 })
