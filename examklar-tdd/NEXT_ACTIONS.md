@@ -1,11 +1,16 @@
 # NEXT ACTIONS - ExamKlar TDD Project
 
 ## LAST ACTION COMPLETED
-✅ 🎉 FRONTEND SUCCESS: ExamKlar app fully functional with beautiful Tailwind styling, proper centering, and responsive design. User loves the result! Ready for next phase per master plan. (at 2025-06-23T01:08:24.517720)
+✅ 🔧 DECKMANAGER TDD IN PROGRESS: Created flashcard store (24/24 tests passing), DeckManager component (3/9 tests passing), identified test issues: ambiguous queries and userEvent JSON input problems. Ready to fix failing tests. (at 2025-06-23T07:09:37)
 
 ## IMMEDIATE NEXT STEPS
-1. Continue with TDD development workflow
-2. **CRITICAL**: After your next action, run:
+1. **PRIORITY**: Fix DeckManager failing tests (6/9 currently failing)
+   - Replace ambiguous getByLabelText queries with more specific selectors
+   - Fix userEvent.type JSON input issue (use fireEvent.change instead)
+   - Ensure deck creation/edit/delete logic works properly
+2. Get all DeckManager tests to GREEN phase
+3. Continue with advanced features per master plan
+4. **CRITICAL**: After your next action, run:
    ```bash
    python3 update_context.py "description of what you did"
    ```
@@ -37,5 +42,5 @@ If you're a new AI taking over:
 4. **REMEMBER**: Update context after every action!
 
 ## Context Last Updated
-2025-06-23T01:08:24.517720 - 🎉 FRONTEND SUCCESS: ExamKlar app fully functional with beautiful Tailwind styling, proper centering, and responsive design. User loves the result! Ready for next phase per master plan.
+2025-06-23T07:09:37 - 🔧 DECKMANAGER TDD IN PROGRESS: Created flashcard store (24/24 tests passing), DeckManager component (3/9 tests passing), identified test issues: ambiguous queries and userEvent JSON input problems. Ready to fix failing tests.
 

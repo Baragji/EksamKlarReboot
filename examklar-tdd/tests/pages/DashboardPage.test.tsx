@@ -38,7 +38,10 @@ describe('DashboardPage - TDD', () => {
         <DashboardPage />
       </Layout>
     )
-    expect(screen.getByText(/progress/i)).toBeInTheDocument()
+    // Check for the new Study Progress Dashboard component
+    expect(screen.getByText('Study Progress Dashboard')).toBeInTheDocument()
+    // Check for the older study progress card
+    expect(screen.getByText('Track your learning journey')).toBeInTheDocument()
   })
   
   it('should show study overview section', () => {
