@@ -3,8 +3,35 @@ import { devtools, persist } from 'zustand/middleware'
 import type { User, Subject, StudyPlan, Progress } from '../types'
 
 /**
+ * Study Session types
+ */
+interface StudySession {
+  id: string
+  subjectId: string
+  subjectName: string
+  date: string
+  duration: number
+  topicsStudied?: string[]
+  topicsPlanned?: string[]
+  completed: boolean
+  type?: 'scheduled'
+  createdAt: Date
+}
+
+interface ScheduledSession {
+  id: string
+  subjectId: string
+  subjectName: string
+  date: string
+  duration: number
+  topicsPlanned: string[]
+  type: 'scheduled'
+  createdAt: Date
+}
+
+/**
  * ExamKlar application state store
- * Manages user data, subjects, study plans, and progress tracking
+ * Manages user data, subjects, study plans, progress tracking, and study sessions
  */
 interface ExamStore {
   // State
@@ -15,6 +42,10 @@ interface ExamStore {
   progress: Progress | null
   onboardingCompleted: boolean
   
+  // Study Sessions
+  studySessions: StudySession[]
+  scheduledSessions: ScheduledSession[]
+  
   // Actions
   setUser: (user: User) => void
   addSubject: (subject: Subject) => void
@@ -23,6 +54,12 @@ interface ExamStore {
   updateStudyPlan: (plan: StudyPlan) => void
   updateProgress: (progress: Progress) => void
   completeOnboarding: () => void
+  
+  // Study Session Actions
+  addScheduledSession: (session: Omit<ScheduledSession, 'id' | 'createdAt'>) => void
+  updateSession: (session: StudySession) => void
+  deleteSession: (sessionId: string) => void
+  completeSession: (sessionId: string, topicsStudied: string[]) => void
   
   // Computed getters
   getUpcomingDeadlines: () => Subject[]
@@ -39,7 +76,9 @@ const initialState = {
   currentSubject: null,
   studyPlan: null,
   progress: null,
-  onboardingCompleted: false
+  onboardingCompleted: false,
+  studySessions: [],
+  scheduledSessions: []
 }
 
 /**
@@ -103,6 +142,77 @@ export const useExamStore = create<ExamStore>()(
         
         // Onboarding management
         completeOnboarding: () => set({ onboardingCompleted: true }, false, 'completeOnboarding'),
+        
+        // Study Session Management
+        addScheduledSession: (sessionData) => set((state) => {
+          const newSession: ScheduledSession = {
+            ...sessionData,
+            id: `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            createdAt: new Date()
+          }
+          return {
+            scheduledSessions: [...state.scheduledSessions, newSession]
+          }
+        }, false, 'addScheduledSession'),
+        
+        updateSession: (updatedSession) => set((state) => {
+          // Update in studySessions if it's a completed session
+          const studySessionIndex = state.studySessions.findIndex(s => s.id === updatedSession.id)
+          if (studySessionIndex !== -1) {
+            const updatedStudySessions = [...state.studySessions]
+            updatedStudySessions[studySessionIndex] = updatedSession
+            return { studySessions: updatedStudySessions }
+          }
+          
+          // Update in scheduledSessions if it's a scheduled session
+          const scheduledSessionIndex = state.scheduledSessions.findIndex(s => s.id === updatedSession.id)
+          if (scheduledSessionIndex !== -1) {
+            const updatedScheduledSessions = [...state.scheduledSessions]
+            // Convert StudySession back to ScheduledSession format
+            const updatedScheduledSession: ScheduledSession = {
+              id: updatedSession.id,
+              subjectId: updatedSession.subjectId,
+              subjectName: updatedSession.subjectName,
+              date: updatedSession.date,
+              duration: updatedSession.duration,
+              topicsPlanned: updatedSession.topicsPlanned || [],
+              type: 'scheduled',
+              createdAt: updatedScheduledSessions[scheduledSessionIndex].createdAt
+            }
+            updatedScheduledSessions[scheduledSessionIndex] = updatedScheduledSession
+            return { scheduledSessions: updatedScheduledSessions }
+          }
+          
+          return state
+        }, false, 'updateSession'),
+        
+        deleteSession: (sessionId) => set((state) => ({
+          studySessions: state.studySessions.filter(s => s.id !== sessionId),
+          scheduledSessions: state.scheduledSessions.filter(s => s.id !== sessionId)
+        }), false, 'deleteSession'),
+        
+        completeSession: (sessionId, topicsStudied) => set((state) => {
+          const scheduledSessionIndex = state.scheduledSessions.findIndex(s => s.id === sessionId)
+          if (scheduledSessionIndex !== -1) {
+            const scheduledSession = state.scheduledSessions[scheduledSessionIndex]
+            const completedSession: StudySession = {
+              id: scheduledSession.id,
+              subjectId: scheduledSession.subjectId,
+              subjectName: scheduledSession.subjectName,
+              date: scheduledSession.date,
+              duration: scheduledSession.duration,
+              topicsStudied,
+              completed: true,
+              createdAt: scheduledSession.createdAt
+            }
+            
+            return {
+              studySessions: [...state.studySessions, completedSession],
+              scheduledSessions: state.scheduledSessions.filter(s => s.id !== sessionId)
+            }
+          }
+          return state
+        }, false, 'completeSession'),
         
         // Utility functions
         reset: () => set(initialState, false, 'reset')
