@@ -2,23 +2,51 @@ import { useState } from 'react'
 import { Button } from '../components/ui/Button'
 import { Input } from '../components/ui/Input'
 
+// Types
+interface SortOption {
+  value: string
+  label: string
+}
+
+interface StatisticCardProps {
+  title: string
+  value: string | number
+  bgColor: string
+  textColor: string
+  valueColor: string
+}
+
+// Constants
+const SUBJECTS = ['All Subjects', 'Mathematics', 'Science', 'History', 'Languages'] as const
+const SORT_OPTIONS: SortOption[] = [
+  { value: 'name', label: 'Name' },
+  { value: 'created', label: 'Date Created' },
+  { value: 'modified', label: 'Last Modified' },
+  { value: 'cards', label: 'Number of Cards' }
+] as const
+
+// Components
+const StatisticCard = ({ title, value, bgColor, textColor, valueColor }: StatisticCardProps) => (
+  <div className={`${bgColor} rounded-lg p-4 text-center`}>
+    <h3 className={`text-lg font-medium ${textColor} mb-1`}>
+      {title}
+    </h3>
+    <p className={`text-2xl font-bold ${valueColor}`}>
+      {value}
+    </p>
+  </div>
+)
+
 const FlashcardsPage = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedSubject, setSelectedSubject] = useState('All Subjects')
   const [sortBy, setSortBy] = useState('name')
 
   // Mock data for development
-  const subjects = ['All Subjects', 'Mathematics', 'Science', 'History', 'Languages']
-  const sortOptions = [
-    { value: 'name', label: 'Name' },
-    { value: 'created', label: 'Date Created' },
-    { value: 'modified', label: 'Last Modified' },
-    { value: 'cards', label: 'Number of Cards' }
-  ]
-
   const deckCount = 0
   const totalCards = 0
   const cardsReview = 0
+  const studyStreak = 0
 
   return (
     <div className="py-8 px-4 max-w-6xl mx-auto">
@@ -67,7 +95,7 @@ const FlashcardsPage = () => {
               value={selectedSubject}
               onChange={(e) => setSelectedSubject(e.target.value)}
             >
-              {subjects.map((subject) => (
+              {SUBJECTS.map((subject) => (
                 <option key={subject} value={subject}>
                   {subject}
                 </option>
@@ -86,7 +114,7 @@ const FlashcardsPage = () => {
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
             >
-              {sortOptions.map((option) => (
+              {SORT_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
@@ -117,30 +145,27 @@ const FlashcardsPage = () => {
           Statistics
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-blue-50 rounded-lg p-4 text-center">
-            <h3 className="text-lg font-medium text-blue-800 mb-1">
-              Total Cards:
-            </h3>
-            <p className="text-2xl font-bold text-blue-600">
-              {totalCards}
-            </p>
-          </div>
-          <div className="bg-orange-50 rounded-lg p-4 text-center">
-            <h3 className="text-lg font-medium text-orange-800 mb-1">
-              Cards Due for Review:
-            </h3>
-            <p className="text-2xl font-bold text-orange-600">
-              {cardsReview}
-            </p>
-          </div>
-          <div className="bg-green-50 rounded-lg p-4 text-center">
-            <h3 className="text-lg font-medium text-green-800 mb-1">
-              Study Streak:
-            </h3>
-            <p className="text-2xl font-bold text-green-600">
-              0 days
-            </p>
-          </div>
+          <StatisticCard
+            title="Total Cards:"
+            value={totalCards}
+            bgColor="bg-blue-50"
+            textColor="text-blue-800"
+            valueColor="text-blue-600"
+          />
+          <StatisticCard
+            title="Cards Due for Review:"
+            value={cardsReview}
+            bgColor="bg-orange-50"
+            textColor="text-orange-800"
+            valueColor="text-orange-600"
+          />
+          <StatisticCard
+            title="Study Streak:"
+            value={`${studyStreak} days`}
+            bgColor="bg-green-50"
+            textColor="text-green-800"
+            valueColor="text-green-600"
+          />
         </div>
       </div>
     </div>
