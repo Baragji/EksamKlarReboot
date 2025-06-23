@@ -85,23 +85,59 @@ const OnboardingPage = () => {
   // Step 1: Welcome
   if (currentStep === 1) {
     return (
-      <div className="text-center py-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Welcome to ExamKlar
-        </h1>
-        <p className="text-xl text-gray-600 mb-8">
-          Your AI-powered study companion
-        </p>
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md mx-auto">
-          <p className="text-gray-700 mb-6">
-            Get started with your personalized exam preparation journey
+      <div 
+        className="text-center py-12 section-gamified-welcome animation-fade-in" 
+        data-testid="onboarding-welcome-step"
+      >
+        <div 
+          className="animation-slide-in"
+          data-testid="onboarding-step-container"
+        >
+        <div 
+          className="animation-fade-in"
+          data-testid="welcome-animation-container"
+        >
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Welcome to ExamKlar
+          </h1>
+          <p className="text-xl text-gray-600 mb-8">
+            Your AI-powered study companion
           </p>
-          <div className="mb-4">
-            <span className="text-sm text-gray-500">Step 1 of 3</span>
+          
+          {/* Motivational Element */}
+          <div 
+            className="text-4xl mb-6"
+            data-testid="welcome-motivation"
+          >
+            🚀
           </div>
-          <Button onClick={handleNext} className="w-full">
-            Get Started
-          </Button>
+          
+          <div 
+            className="bg-white rounded-lg shadow-lg p-8 max-w-md mx-auto card-gamified-interactive"
+            data-testid="onboarding-card"
+          >
+            <p className="text-gray-700 mb-6">
+              Get started with your personalized exam preparation journey
+            </p>
+            
+            {/* Gamified Progress Indicator */}
+            <div 
+              className="mb-4 progress-gamified-indicator"
+              data-testid="onboarding-progress"
+              aria-label="Step 1 of 3"
+            >
+              <span className="text-sm text-gray-500">Step 1 of 3</span>
+            </div>
+            
+            <Button 
+              onClick={handleNext} 
+              className="w-full"
+              variant="gamified-primary"
+            >
+              Get Started
+            </Button>
+          </div>
+        </div>
         </div>
       </div>
     )
@@ -110,7 +146,14 @@ const OnboardingPage = () => {
   // Step 2: Add Subject
   if (currentStep === 2) {
     return (
-      <div className="text-center py-12">
+      <div 
+        className="text-center py-12 section-gamified-form animation-slide-in"
+        data-testid="onboarding-step-container"
+      >
+        <div 
+          className="section-gamified-form"
+          data-testid="onboarding-subject-step"
+        >
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
           Add Your First Subject
         </h1>
@@ -122,12 +165,23 @@ const OnboardingPage = () => {
             <span className="text-sm text-gray-500">Step 2 of 3</span>
           </div>
           
+          {/* Form Validation Feedback */}
+          {Object.keys(errors).length > 0 && (
+            <div 
+              className="alert-gamified-error mb-4"
+              data-testid="form-validation-feedback"
+            >
+              Please fill in all required fields
+            </div>
+          )}
+          
           <div className="space-y-4">
             <div>
               <Input
                 name="subject-name"
                 label="Subject Name"
                 type="text"
+                variant="gamified-enhanced"
                 value={formData.subjectName}
                 onChange={(e) => handleInputChange('subjectName', e.target.value)}
                 error={errors.subjectName}
@@ -140,6 +194,7 @@ const OnboardingPage = () => {
                 name="exam-date"
                 label="Exam Date"
                 type="date"
+                variant="gamified-enhanced"
                 value={formData.examDate}
                 onChange={(e) => handleInputChange('examDate', e.target.value)}
                 error={errors.examDate}
@@ -151,6 +206,7 @@ const OnboardingPage = () => {
                 name="estimated-hours"
                 label="Estimated Hours"
                 type="number"
+                variant="gamified-enhanced"
                 value={formData.estimatedHours}
                 onChange={(e) => handleInputChange('estimatedHours', e.target.value)}
                 error={errors.estimatedHours}
@@ -169,19 +225,35 @@ const OnboardingPage = () => {
             </Button>
           </div>
         </div>
+        </div>
       </div>
     )
   }
 
   // Step 3: Completion
   return (
-    <div className="text-center py-12">
+    <div 
+      className="text-center py-12 section-gamified-celebration animation-slide-in"
+      data-testid="onboarding-step-container"
+    >
+      <div 
+        className="section-gamified-celebration"
+        data-testid="onboarding-completion-step"
+      >
       <h1 className="text-4xl font-bold text-gray-900 mb-4">
         You're All Set!
       </h1>
       <p className="text-xl text-gray-600 mb-8">
         Your study plan is ready to go
       </p>
+      
+      {/* Celebration Animation */}
+      <div 
+        className="celebration-animation mb-8"
+        data-testid="completion-celebration"
+      >
+        <div className="celebration-confetti">🎊 ✨ 🎉 ✨ 🎊</div>
+      </div>
       <div className="bg-white rounded-lg shadow-lg p-8 max-w-md mx-auto">
         <div className="mb-4">
           <span className="text-sm text-gray-500">Step 3 of 3</span>
@@ -200,6 +272,7 @@ const OnboardingPage = () => {
         <Button onClick={handleGoToDashboard} className="w-full">
           Go to Dashboard
         </Button>
+      </div>
       </div>
     </div>
   )

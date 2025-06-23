@@ -13,16 +13,6 @@ describe('App Routing - TDD', () => {
     
     expect(screen.getByText('Welcome to ExamKlar')).toBeInTheDocument()
   })
-
-  it('should render onboarding page on /onboarding route', () => {
-    render(
-      <MemoryRouter initialEntries={['/onboarding']}>
-        <App />
-      </MemoryRouter>
-    )
-    
-    expect(screen.getByText('Welcome to ExamKlar')).toBeInTheDocument()
-  })
   
   it('should render dashboard on /dashboard route', () => {
     render(

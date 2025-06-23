@@ -16,6 +16,7 @@ const inputVariants = cva(
         success: 'border-green-500 focus:border-green-500 focus:ring-green-500',
         // Gamified variants
         'gamified': 'input-gamified focus-gamified',
+        'gamified-enhanced': 'input-gamified-enhanced',
         'gamified-success': 'input-gamified-success focus-gamified',
         'gamified-error': 'input-gamified-error focus-gamified'
       },
