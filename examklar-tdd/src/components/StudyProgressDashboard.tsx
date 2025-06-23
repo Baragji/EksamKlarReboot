@@ -7,13 +7,6 @@ import { StudyCalendar } from './StudyCalendar'
 /**
  * Utility functions for the dashboard
  */
-const getStreakMessage = (streak: number): string => {
-  if (streak >= 7) return `Great streak! Keep it up! 🔥`
-  if (streak >= 3) return `Building momentum! 💪`
-  if (streak >= 1) return `Good start! 👍`
-  return 'Ready to start your streak?'
-}
-
 const formatTime = (minutes: number): string => {
   return `${Math.floor(minutes / 60)} hours`
 }
@@ -31,7 +24,11 @@ const calculateEfficiency = (totalMinutes: number, sessions: number): string => 
 const StudyProgressDashboard = () => {
   const { 
     progress, 
-    getUpcomingDeadlines
+    getUpcomingDeadlines,
+    // V5 Gamification: Streak Counter Integration
+    streakCount,
+    longestStreak,
+    getStreakMessage
   } = useExamStore()
   
   const { getStats } = useFlashcardStore()
@@ -62,9 +59,10 @@ const StudyProgressDashboard = () => {
           />
           <ProgressMetricCard
             title="Current Streak"
-            value="0 days"
+            value={`${streakCount} days`}
             bgColor="bg-purple-50"
             textColor="text-purple-600"
+            subtitle={getStreakMessage()}
           />
           <ProgressMetricCard
             title="Study Efficiency"
@@ -176,10 +174,10 @@ const StudyProgressDashboard = () => {
         />
         <ProgressMetricCard
           title="Current Streak"
-          value={`${progress.streakCount} days`}
+          value={`${streakCount} days`}
           bgColor="bg-purple-50"
           textColor="text-purple-600"
-          subtitle={getStreakMessage(progress.streakCount)}
+          subtitle={getStreakMessage()}
         />
         <ProgressMetricCard
           title="Study Efficiency"

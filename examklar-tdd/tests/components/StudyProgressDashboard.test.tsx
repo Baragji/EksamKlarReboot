@@ -48,6 +48,10 @@ describe('StudyProgressDashboard Component - TDD', () => {
       ],
       studySessions: [],
       scheduledSessions: [],
+      // V5 Gamification: Streak Counter Integration - mock streak properties
+      streakCount: 7,
+      longestStreak: 10,
+      getStreakMessage: vi.fn(() => 'Great job! Keep it up!'),
       getUpcomingDeadlines: vi.fn(() => [
         {
           id: '1',
@@ -141,6 +145,10 @@ describe('StudyProgressDashboard Component - TDD', () => {
     mockUseExamStore.mockReturnValue({
       progress: null,
       subjects: [],
+      // V5 Gamification: Streak properties even in empty state
+      streakCount: 0,
+      longestStreak: 0,
+      getStreakMessage: vi.fn(() => 'Start your streak today!'),
       getUpcomingDeadlines: vi.fn(() => []),
       getCurrentProgress: vi.fn(() => 0)
     })
@@ -174,8 +182,8 @@ describe('StudyProgressDashboard Component - TDD', () => {
   it('should show motivational messages based on streak', () => {
     render(<StudyProgressDashboard />)
     
-    // Check for streak-based motivation
-    expect(screen.getByText(/great streak/i)).toBeInTheDocument()
+    // Check for streak-based motivation - updated to match actual mock message
+    expect(screen.getByText('Great job! Keep it up!')).toBeInTheDocument()
   })
 
   it('should display progress charts container', () => {
