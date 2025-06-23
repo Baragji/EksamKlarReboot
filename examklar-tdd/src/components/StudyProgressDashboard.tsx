@@ -46,13 +46,14 @@ const StudyProgressDashboard = () => {
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Study Progress Dashboard</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <ProgressMetricCard
-            title="Total Study Time"
-            value="0 hours"
-            bgColor="bg-blue-50"
-            textColor="text-blue-600"
-            data-testid="total-study-time"
-          />
+          <div data-testid="total-study-time">
+            <ProgressMetricCard
+              title="Total Study Time"
+              value="0 hours"
+              bgColor="bg-blue-50"
+              textColor="text-blue-600"
+            />
+          </div>
           <ProgressMetricCard
             title="Sessions Completed"
             value="No sessions yet"
@@ -153,13 +154,14 @@ const StudyProgressDashboard = () => {
       
       {/* Key Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <ProgressMetricCard
-          title="Total Study Time"
-          value={totalHours}
-          bgColor="bg-blue-50"
-          textColor="text-blue-600"
-          data-testid="total-study-time"
-        />
+        <div data-testid="total-study-time">
+          <ProgressMetricCard
+            title="Total Study Time"
+            value={totalHours}
+            bgColor="bg-blue-50"
+            textColor="text-blue-600"
+          />
+        </div>
         <ProgressMetricCard
           title="Sessions Completed"
           value={progress.sessionsCompleted}
