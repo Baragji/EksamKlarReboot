@@ -79,8 +79,7 @@ test.describe('ExamKlar E2E - Critical User Journeys', () => {
     await page.goto('/quiz')
     
     // Select subject for quiz
-    await page.click('[data-testid="subject-selector"]')
-    await page.click('option:has-text("Mathematics")')
+    await page.selectOption('[data-testid="subject-selector"]', 'mathematics')
     
     // Configure quiz
     await page.selectOption('select[name="question-count"]', '5')
