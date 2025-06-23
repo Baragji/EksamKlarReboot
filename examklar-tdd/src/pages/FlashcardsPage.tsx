@@ -61,13 +61,13 @@ const FlashcardsPage = () => {
   const studyStreak = 0
 
   return (
-    <div className="py-8 px-4 max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold text-gray-900 mb-6">
+    <div className="py-8 px-1 sm:px-4 max-w-full sm:max-w-6xl mx-auto w-full">
+      <h1 className="text-3xl font-bold text-gray-900 mb-6 px-2 sm:px-0">
         Flashcards
       </h1>
 
       {/* Deck Management Section */}
-      <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+      <div className="bg-white rounded-lg shadow-lg p-2 sm:p-6 mb-6 w-full mx-1 sm:mx-0">
         <div className="flex justify-between items-center mb-6">
           <div>
             <h2 className="text-2xl font-semibold text-gray-800 mb-2">
@@ -141,12 +141,12 @@ const FlashcardsPage = () => {
 
         {/* Create Deck Form */}
         {showCreateForm && (
-          <div className="bg-gray-50 rounded-lg p-6 mb-6">
+          <div className="bg-gray-50 rounded-lg p-2 sm:p-6 mb-6 w-full mx-0">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
               Create New Deck
             </h3>
-            <form className="space-y-4">
-              <div>
+            <form className="space-y-4 w-full">
+              <div className="w-full">
                 <label htmlFor="deck-name" className="block text-sm font-medium text-gray-700 mb-1">
                   Deck Name
                 </label>
@@ -157,9 +157,10 @@ const FlashcardsPage = () => {
                   onChange={(e) => setDeckName(e.target.value)}
                   placeholder="Enter deck name..."
                   required
+                  className="w-full !max-w-none"
                 />
               </div>
-              <div>
+              <div className="w-full">
                 <label htmlFor="deck-description" className="block text-sm font-medium text-gray-700 mb-1">
                   Description
                 </label>
@@ -169,7 +170,7 @@ const FlashcardsPage = () => {
                   onChange={(e) => setDeckDescription(e.target.value)}
                   placeholder="Enter deck description..."
                   rows={3}
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full !max-w-none rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
               <div className="flex gap-3">
