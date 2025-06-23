@@ -6,6 +6,26 @@ beforeEach(() => {
   cleanup()
 })
 
+// Mock window.location for React Router
+Object.defineProperty(window, 'location', {
+  value: {
+    href: 'http://localhost:3000/',
+    origin: 'http://localhost:3000',
+    protocol: 'http:',
+    host: 'localhost:3000',
+    hostname: 'localhost',
+    port: '3000',
+    pathname: '/',
+    search: '',
+    hash: '',
+    assign: () => {},
+    replace: () => {},
+    reload: () => {},
+    toString: () => 'http://localhost:3000/'
+  },
+  writable: true
+})
+
 // Mock ResizeObserver for chart.js
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ;(global as any).ResizeObserver = class ResizeObserver {
