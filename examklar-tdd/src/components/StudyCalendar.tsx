@@ -23,8 +23,8 @@ export const StudyCalendar = memo(() => {
 
   // Combine all sessions for display
   const allSessions = [
-    ...studySessions,
-    ...scheduledSessions.map(session => ({ ...session, completed: false }))
+    ...(studySessions || []),
+    ...(scheduledSessions || []).map(session => ({ ...session, completed: false }))
   ];
 
   // Calendar navigation

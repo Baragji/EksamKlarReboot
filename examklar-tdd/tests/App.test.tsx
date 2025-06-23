@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, cleanup } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, it, expect } from 'vitest'
 import App from '../src/App'
@@ -79,7 +79,8 @@ describe('App Routing - TDD', () => {
   })
   
   it('should maintain layout across different routes', () => {
-    const { rerender } = render(
+    // Test dashboard route
+    render(
       <MemoryRouter initialEntries={['/dashboard']}>
         <App />
       </MemoryRouter>
@@ -87,7 +88,10 @@ describe('App Routing - TDD', () => {
     
     expect(screen.getByRole('navigation')).toBeInTheDocument()
     
-    rerender(
+    // Clean up and test study route separately
+    cleanup()
+    
+    render(
       <MemoryRouter initialEntries={['/study']}>
         <App />
       </MemoryRouter>
