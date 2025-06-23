@@ -7,14 +7,14 @@
 **AFTER EVERY ACTION YOU TAKE, YOU MUST RUN:**
 
 ```bash
-python3 update_context.py "description of what you just did"
+python3 tdd.py "description of what you just did"
 ```
 
 ## 🧪 TDD Examples:
 - Wrote test: `python3 update_context.py "Created failing test for Button component click handler"`
-- Made test pass: `python3 update_context.py "Implemented Button onClick functionality - test now passes"`
-- Refactored: `python3 update_context.py "Refactored Button component for better maintainability"`
-- Added feature: `python3 update_context.py "Added new flashcard component with tests"`
+- Made test pass: `python3 tdd.py "Implemented Button onClick functionality - test now passes"`
+- Refactored: `python3 tdd.py "Refactored Button component for better maintainability"`
+- Added feature: `python3 tdd.py "Added new flashcard component with tests"`
 
 ## 🔴🟢🔵 TDD Workflow:
 1. **RED**: Write a failing test first
@@ -31,7 +31,7 @@ python3 update_context.py "description of what you just did"
 
 ## Check Context Status:
 ```bash
-python3 check_context.py
+python3 tdd.py "checking context status"
 ```
 
 ## If You're a New AI Taking Over:
@@ -40,11 +40,6 @@ python3 check_context.py
 3. **ALWAYS**: Follow TDD workflow - write tests first!
 4. **ALWAYS**: Update context after every action you take
 
-## This File Exists Because:
-We cannot hardcode rules into AI coding assistants, so we rely on:
-- Prominent visual reminders (this file)
-- Simple, easy-to-use update scripts
-- Self-checking context systems
-- **TDD methodology** for quality assurance
-
 **🚨 REMEMBER: TDD + Context updates are NOT optional - they are MANDATORY for system quality and continuity!**
+
+**NEW V5 COMMAND**: `python3 tdd.py "what you just did"`
