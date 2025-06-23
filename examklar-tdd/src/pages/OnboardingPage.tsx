@@ -125,6 +125,7 @@ const OnboardingPage = () => {
           <div className="space-y-4">
             <div>
               <Input
+                name="subject-name"
                 label="Subject Name"
                 type="text"
                 value={formData.subjectName}
@@ -136,6 +137,7 @@ const OnboardingPage = () => {
             
             <div>
               <Input
+                name="exam-date"
                 label="Exam Date"
                 type="date"
                 value={formData.examDate}
@@ -146,6 +148,7 @@ const OnboardingPage = () => {
             
             <div>
               <Input
+                name="estimated-hours"
                 label="Estimated Hours"
                 type="number"
                 value={formData.estimatedHours}

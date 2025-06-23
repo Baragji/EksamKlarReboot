@@ -24,13 +24,11 @@ test.describe('ExamKlar E2E - Critical User Journeys', () => {
     await page.click('button:has-text("Get Started")')
     
     // Step 2: Add first subject
-    await expect(page.locator('h2')).toContainText('Add Your First Subject')
+    await expect(page.getByRole('heading', { name: 'Add Your First Subject' })).toBeVisible()
     await page.fill('input[name="subject-name"]', 'Mathematics')
-    await page.fill('input[name="subject-description"]', 'Calculus and Algebra')
-    await page.selectOption('select[name="subject-emoji"]', '📊')
     await page.fill('input[name="exam-date"]', '2025-08-01')
     await page.fill('input[name="estimated-hours"]', '40')
-    await page.click('button:has-text("Add Subject")')
+    await page.click('button:has-text("Next")')
     
     // Step 3: Study preferences
     await expect(page.locator('h2')).toContainText('Study Preferences')
