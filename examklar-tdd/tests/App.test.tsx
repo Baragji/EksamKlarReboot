@@ -21,7 +21,8 @@ describe('App Routing - TDD', () => {
       </MemoryRouter>
     )
     
-    expect(screen.getByText('Dashboard')).toBeInTheDocument()
+    // Use more specific selector - page heading instead of navigation
+    expect(screen.getByRole('heading', { level: 1, name: 'Dashboard' })).toBeInTheDocument()
   })
   
   it('should render study page on /study route', () => {
@@ -41,7 +42,8 @@ describe('App Routing - TDD', () => {
       </MemoryRouter>
     )
     
-    expect(screen.getByText('Flashcards')).toBeInTheDocument()
+    // Use more specific selector - page heading instead of navigation
+    expect(screen.getByRole('heading', { level: 1, name: 'Flashcards' })).toBeInTheDocument()
   })
   
   it('should render quiz page on /quiz route', () => {
@@ -51,7 +53,8 @@ describe('App Routing - TDD', () => {
       </MemoryRouter>
     )
     
-    expect(screen.getByText('Quiz')).toBeInTheDocument()
+    // Use more specific selector - page heading instead of navigation
+    expect(screen.getByRole('heading', { level: 1, name: 'Quiz' })).toBeInTheDocument()
   })
   
   it('should render 404 page for unknown routes', () => {

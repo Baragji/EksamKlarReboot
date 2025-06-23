@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import { describe, it, expect } from 'vitest'
 import '@testing-library/jest-dom'
 import DashboardPage from '../../src/pages/DashboardPage'
@@ -7,36 +8,44 @@ import Layout from '../../src/components/layout/Layout'
 describe('DashboardPage - TDD', () => {
   it('should render Dashboard heading', () => {
     render(
-      <Layout>
-        <DashboardPage />
-      </Layout>
+      <MemoryRouter>
+        <Layout>
+          <DashboardPage />
+        </Layout>
+      </MemoryRouter>
     )
-    expect(screen.getByText('Dashboard')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'Dashboard' })).toBeInTheDocument()
   })
   
   it('should have a main heading with correct accessibility', () => {
     render(
-      <Layout>
-        <DashboardPage />
-      </Layout>
+      <MemoryRouter>
+        <Layout>
+          <DashboardPage />
+        </Layout>
+      </MemoryRouter>
     )
     expect(screen.getByRole('heading', { level: 1, name: /Dashboard/i })).toBeInTheDocument()
   })
   
   it('should have proper semantic structure', () => {
     render(
-      <Layout>
-        <DashboardPage />
-      </Layout>
+      <MemoryRouter>
+        <Layout>
+          <DashboardPage />
+        </Layout>
+      </MemoryRouter>
     )
     expect(screen.getByRole('main')).toBeInTheDocument()
   })
   
   it('should display user progress overview', () => {
     render(
-      <Layout>
-        <DashboardPage />
-      </Layout>
+      <MemoryRouter>
+        <Layout>
+          <DashboardPage />
+        </Layout>
+      </MemoryRouter>
     )
     // Check for the new Study Progress Dashboard component
     expect(screen.getByText('Study Progress Dashboard')).toBeInTheDocument()
@@ -46,9 +55,11 @@ describe('DashboardPage - TDD', () => {
   
   it('should show study overview section', () => {
     render(
-      <Layout>
-        <DashboardPage />
-      </Layout>
+      <MemoryRouter>
+        <Layout>
+          <DashboardPage />
+        </Layout>
+      </MemoryRouter>
     )
     expect(screen.getByText(/study overview/i)).toBeInTheDocument()
   })

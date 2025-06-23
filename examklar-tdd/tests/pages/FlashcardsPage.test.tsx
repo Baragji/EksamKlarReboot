@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import { describe, it, expect } from 'vitest'
 import '@testing-library/jest-dom'
 import FlashcardsPage from '../../src/pages/FlashcardsPage'
@@ -8,18 +9,22 @@ describe('FlashcardsPage - Advanced TDD', () => {
   // Basic structure tests (these should pass)
   it('should render Flashcards heading', () => {
     render(
-      <Layout>
-        <FlashcardsPage />
-      </Layout>
+      <MemoryRouter>
+        <Layout>
+          <FlashcardsPage />
+        </Layout>
+      </MemoryRouter>
     )
-    expect(screen.getByText('Flashcards')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'Flashcards' })).toBeInTheDocument()
   })
   
   it('should have proper semantic structure', () => {
     render(
-      <Layout>
-        <FlashcardsPage />
-      </Layout>
+      <MemoryRouter>
+        <Layout>
+          <FlashcardsPage />
+        </Layout>
+      </MemoryRouter>
     )
     expect(screen.getByRole('main')).toBeInTheDocument()
   })
@@ -67,9 +72,11 @@ describe('FlashcardsPage - Advanced TDD', () => {
 
   it('should have accessibility attributes', () => {
     render(
-      <Layout>
-        <FlashcardsPage />
-      </Layout>
+      <MemoryRouter>
+        <Layout>
+          <FlashcardsPage />
+        </Layout>
+      </MemoryRouter>
     )
     
     expect(screen.getByRole('main')).toBeInTheDocument()
