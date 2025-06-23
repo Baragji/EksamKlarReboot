@@ -63,4 +63,19 @@ describe('DashboardPage - TDD', () => {
     )
     expect(screen.getByText(/study overview/i)).toBeInTheDocument()
   })
+
+  it('should display achievements section', () => {
+    // RED: This test will fail because we haven't added achievements to DashboardPage yet
+    render(
+      <MemoryRouter>
+        <Layout>
+          <DashboardPage />
+        </Layout>
+      </MemoryRouter>
+    )
+    
+    // Should show achievements section
+    expect(screen.getByTestId('achievements-list')).toBeInTheDocument()
+    expect(screen.getByText('🏆 Achievements')).toBeInTheDocument()
+  })
 })

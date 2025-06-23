@@ -1,4 +1,5 @@
 import StudyProgressDashboard from '../components/StudyProgressDashboard'
+import AchievementsList from '../components/AchievementsList'
 import { SubjectCard } from '../components/SubjectCard'
 import { useExamStore } from '../stores/examStore'
 
@@ -13,6 +14,11 @@ const DashboardPage = () => {
       
       {/* Study Progress Analytics Dashboard */}
       <StudyProgressDashboard />
+      
+      {/* Achievements Section */}
+      <div className="mt-8">
+        <AchievementsList />
+      </div>
       
       {/* Recent Sessions */}
       <div className="mt-8">

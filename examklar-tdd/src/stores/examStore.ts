@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import type { User, Subject, StudyPlan, Progress } from '../types'
+import { useAchievementStore, type ProgressData } from './achievementStore'
 
 /**
  * Study Session types
@@ -50,6 +51,8 @@ interface ExamStore {
   streakCount: number
   longestStreak: number
   lastActivityDate: Date | null
+  flashcardsReviewed: number
+  recentAchievements: string[]
   
   // Actions
   setUser: (user: User) => void
@@ -67,8 +70,15 @@ interface ExamStore {
   completeSession: (sessionId: string, topicsStudied: string[]) => void
   
   // Streak Actions
-  recordActivity: () => void
+  recordActivity: (activityDate?: Date) => void
   getStreakMessage: () => string
+  
+  // Achievement Integration (V5 Gamification)
+  triggerAchievementCheck: () => string[]
+  getProgressForAchievements: () => ProgressData
+  getRecentAchievements: () => string[]
+  clearRecentAchievements: () => void
+  resetStore: () => void
   
   // Computed getters
   getUpcomingDeadlines: () => Subject[]
@@ -90,7 +100,9 @@ const initialState = {
   scheduledSessions: [],
   streakCount: 0,
   longestStreak: 0,
-  lastActivityDate: null
+  lastActivityDate: null,
+  flashcardsReviewed: 0,
+  recentAchievements: [] as string[]
 }
 
 /**
@@ -203,95 +215,126 @@ export const useExamStore = create<ExamStore>()(
           scheduledSessions: state.scheduledSessions.filter(s => s.id !== sessionId)
         }), false, 'deleteSession'),
         
-        completeSession: (sessionId, topicsStudied) => set((state) => {
-          const scheduledSessionIndex = state.scheduledSessions.findIndex(s => s.id === sessionId)
-          if (scheduledSessionIndex !== -1) {
-            const scheduledSession = state.scheduledSessions[scheduledSessionIndex]
-            const completedSession: StudySession = {
-              id: scheduledSession.id,
-              subjectId: scheduledSession.subjectId,
-              subjectName: scheduledSession.subjectName,
-              date: scheduledSession.date,
-              duration: scheduledSession.duration,
-              topicsStudied,
-              completed: true,
-              createdAt: scheduledSession.createdAt
-            }
-            
-            // Automatically record activity when completing session (V5 Gamification)
-            const now = new Date()
-            const today = now.toDateString()
-            
-            let streakUpdate = {
-              streakCount: state.streakCount,
-              longestStreak: state.longestStreak,
-              lastActivityDate: state.lastActivityDate
-            }
-            
-            // If not already recorded activity today, update streak
-            if (!state.lastActivityDate || state.lastActivityDate.toDateString() !== today) {
-              let newStreakCount = 1
+        completeSession: (sessionId, topicsStudied) => {
+          set((state) => {
+            const scheduledSessionIndex = state.scheduledSessions.findIndex(s => s.id === sessionId)
+            if (scheduledSessionIndex !== -1) {
+              const scheduledSession = state.scheduledSessions[scheduledSessionIndex]
+              const completedSession: StudySession = {
+                id: scheduledSession.id,
+                subjectId: scheduledSession.subjectId,
+                subjectName: scheduledSession.subjectName,
+                date: scheduledSession.date,
+                duration: scheduledSession.duration,
+                topicsStudied,
+                completed: true,
+                createdAt: scheduledSession.createdAt
+              }
               
-              // Check if the last activity was yesterday (consecutive days)
-              if (state.lastActivityDate) {
-                const yesterday = new Date(now)
-                yesterday.setDate(yesterday.getDate() - 1)
+              // Automatically record activity when completing session (V5 Gamification)
+              const now = new Date()
+              const today = now.toDateString()
+              
+              let streakUpdate = {
+                streakCount: state.streakCount,
+                longestStreak: state.longestStreak,
+                lastActivityDate: state.lastActivityDate
+              }
+              
+              // If not already recorded activity today, update streak
+              if (!state.lastActivityDate || state.lastActivityDate.toDateString() !== today) {
+                let newStreakCount = 1
                 
-                if (state.lastActivityDate.toDateString() === yesterday.toDateString()) {
-                  // Consecutive day - extend streak
-                  newStreakCount = state.streakCount + 1
+                // Check if the last activity was yesterday (consecutive days)
+                if (state.lastActivityDate) {
+                  const yesterday = new Date(now)
+                  yesterday.setDate(yesterday.getDate() - 1)
+                  
+                  if (state.lastActivityDate.toDateString() === yesterday.toDateString()) {
+                    // Consecutive day - extend streak
+                    newStreakCount = state.streakCount + 1
+                  }
+                }
+                
+                streakUpdate = {
+                  streakCount: newStreakCount,
+                  longestStreak: Math.max(state.longestStreak, newStreakCount),
+                  lastActivityDate: now
                 }
               }
               
-              streakUpdate = {
-                streakCount: newStreakCount,
-                longestStreak: Math.max(state.longestStreak, newStreakCount),
-                lastActivityDate: now
+              // Update progress state
+              const currentProgress = state.progress || {
+                sessionsCompleted: 0,
+                totalStudyTime: 0,
+                streakCount: 0,
+                lastActivity: new Date(),
+                weeklyGoal: 600,
+                weeklyProgress: 0
+              }
+              
+              const newProgress = {
+                ...currentProgress,
+                sessionsCompleted: currentProgress.sessionsCompleted + 1,
+                totalStudyTime: currentProgress.totalStudyTime + scheduledSession.duration,
+                lastActivity: now,
+                weeklyProgress: currentProgress.weeklyProgress + scheduledSession.duration
+              }
+              
+              return {
+                studySessions: [...state.studySessions, completedSession],
+                scheduledSessions: state.scheduledSessions.filter(s => s.id !== sessionId),
+                progress: newProgress,
+                ...streakUpdate
               }
             }
-            
-            return {
-              studySessions: [...state.studySessions, completedSession],
-              scheduledSessions: state.scheduledSessions.filter(s => s.id !== sessionId),
-              ...streakUpdate
-            }
-          }
-          return state
-        }, false, 'completeSession'),
+            return state
+          }, false, 'completeSession')
+          
+          // Trigger achievement check after completing session
+          const examState = get()
+          examState.triggerAchievementCheck()
+        },
         
         // Streak management (V5 Gamification)
-        recordActivity: () => set((state) => {
-          const now = new Date()
-          const today = now.toDateString()
-          
-          // If already recorded activity today, don't change streak
-          if (state.lastActivityDate && state.lastActivityDate.toDateString() === today) {
-            return state
-          }
-          
-          let newStreakCount = 1
-          
-          // Check if the last activity was yesterday (consecutive days)
-          if (state.lastActivityDate) {
-            const yesterday = new Date(now)
-            yesterday.setDate(yesterday.getDate() - 1)
+        recordActivity: (activityDate?: Date) => {
+          set((state) => {
+            const now = activityDate || new Date()
+            const today = now.toDateString()
             
-            if (state.lastActivityDate.toDateString() === yesterday.toDateString()) {
-              // Consecutive day - extend streak
-              newStreakCount = state.streakCount + 1
+            // If already recorded activity today, don't change streak
+            if (state.lastActivityDate && state.lastActivityDate.toDateString() === today) {
+              return state
             }
-            // If not consecutive, streak resets to 1 (already set above)
-          }
+            
+            let newStreakCount = 1
+            
+            // Check if the last activity was yesterday (consecutive days)
+            if (state.lastActivityDate) {
+              const yesterday = new Date(now)
+              yesterday.setDate(yesterday.getDate() - 1)
+              
+              if (state.lastActivityDate.toDateString() === yesterday.toDateString()) {
+                // Consecutive day - extend streak
+                newStreakCount = state.streakCount + 1
+              }
+              // If not consecutive, streak resets to 1 (already set above)
+            }
+            
+            // Update longest streak if current exceeds it
+            const newLongestStreak = Math.max(state.longestStreak, newStreakCount)
+            
+            return {
+              streakCount: newStreakCount,
+              longestStreak: newLongestStreak,
+              lastActivityDate: now
+            }
+          }, false, 'recordActivity')
           
-          // Update longest streak if current exceeds it
-          const newLongestStreak = Math.max(state.longestStreak, newStreakCount)
-          
-          return {
-            streakCount: newStreakCount,
-            longestStreak: newLongestStreak,
-            lastActivityDate: now
-          }
-        }, false, 'recordActivity'),
+          // Trigger achievement check after recording activity
+          const examState = get()
+          examState.triggerAchievementCheck()
+        },
         
         getStreakMessage: () => {
           const state = get()
@@ -308,6 +351,47 @@ export const useExamStore = create<ExamStore>()(
           } else {
             return `Amazing streak! 🔥 ${streakCount} days in a row!`
           }
+        },
+        
+        // Achievement Integration Methods
+        triggerAchievementCheck: () => {
+          const state = get()
+          const progressData = state.getProgressForAchievements()
+          
+          const achievementStore = useAchievementStore.getState()
+          const newlyUnlocked = achievementStore.checkAchievements(progressData)
+          
+          // Store recently unlocked achievements for notifications
+          if (newlyUnlocked.length > 0) {
+            set((currentState) => ({
+              recentAchievements: [...currentState.recentAchievements, ...newlyUnlocked]
+            }), false, 'triggerAchievementCheck')
+          }
+          
+          return newlyUnlocked
+        },
+        
+        getProgressForAchievements: () => {
+          const state = get()
+          return {
+            sessionsCompleted: state.progress?.sessionsCompleted || 0,
+            totalStudyTime: state.progress?.totalStudyTime || 0,
+            streakCount: state.streakCount,
+            flashcardsReviewed: state.flashcardsReviewed
+          }
+        },
+        
+        getRecentAchievements: () => {
+          const state = get()
+          return state.recentAchievements
+        },
+        
+        clearRecentAchievements: () => {
+          set({ recentAchievements: [] }, false, 'clearRecentAchievements')
+        },
+        
+        resetStore: () => {
+          set(initialState, false, 'resetStore')
         },
         
         // Utility functions
