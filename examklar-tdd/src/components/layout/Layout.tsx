@@ -8,6 +8,15 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Skip Link for Accessibility - First focusable element */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-[9999] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        tabIndex={0}
+      >
+        Skip to main content
+      </a>
+      
       <header className="bg-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
@@ -21,7 +30,7 @@ const Layout = ({ children }: LayoutProps) => {
         </div>
       </header>
       
-      <main role="main" className="py-8">
+      <main role="main" id="main-content" className="py-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center">
           <div className="w-full">
             {children}

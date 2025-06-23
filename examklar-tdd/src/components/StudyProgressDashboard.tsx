@@ -2,6 +2,7 @@ import { useExamStore } from '../stores/examStore'
 import { useFlashcardStore } from '../stores/flashcardStore'
 import { ProgressMetricCard, ProgressBar } from './ui/ProgressComponents'
 import { ProgressCharts } from './ProgressCharts'
+import { StudyCalendar } from './StudyCalendar'
 import type { ProgressChartsData } from './ProgressCharts'
 
 /**
@@ -110,6 +111,12 @@ const StudyProgressDashboard = () => {
             subjectProgress: [],
             monthlyTrend: []
           }} />
+        </div>
+        
+        {/* Study Calendar */}
+        <div className="mt-8" data-testid="study-calendar-section">
+          <h3 className="text-lg font-semibold mb-4">Study Calendar</h3>
+          <StudyCalendar />
         </div>
       </div>
     )
@@ -243,6 +250,12 @@ const StudyProgressDashboard = () => {
       <div data-testid="progress-charts">
         <h3 className="text-lg font-semibold mb-4">Progress Trends</h3>
         <ProgressCharts data={chartData} />
+      </div>
+      
+      {/* Study Calendar */}
+      <div className="mt-8" data-testid="study-calendar-section">
+        <h3 className="text-lg font-semibold mb-4">Study Calendar</h3>
+        <StudyCalendar />
       </div>
     </div>
   )

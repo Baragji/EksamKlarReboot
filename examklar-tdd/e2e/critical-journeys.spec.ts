@@ -120,7 +120,7 @@ test.describe('ExamKlar E2E - Critical User Journeys', () => {
     
     // Should display progress charts
     await expect(page.locator('[data-testid="progress-charts"]')).toBeVisible()
-    await expect(page.locator('canvas')).toBeVisible() // Chart.js canvas elements
+    await expect(page.locator('canvas').first()).toBeVisible() // Chart.js canvas elements
     
     // Should show study calendar
     await expect(page.locator('[data-testid="study-calendar"]')).toBeVisible()

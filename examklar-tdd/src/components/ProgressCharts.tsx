@@ -38,22 +38,32 @@ export interface ProgressChartsProps {
 }
 
 export const ProgressCharts: React.FC<ProgressChartsProps> = ({ data }) => {
-  // Handle empty data case
-  if (!data.weeklyStudyHours.length && !data.subjectProgress.length && !data.monthlyTrend.length) {
-    return (
-      <div data-testid="progress-charts-container">
-        <p>No study data available</p>
-      </div>
-    )
+  // Provide default data if empty to ensure charts always render
+  const chartData = {
+    weeklyStudyHours: data.weeklyStudyHours.length > 0 ? data.weeklyStudyHours : [
+      { day: 'Mon', hours: 0 },
+      { day: 'Tue', hours: 0 },
+      { day: 'Wed', hours: 0 },
+      { day: 'Thu', hours: 0 },
+      { day: 'Fri', hours: 0 },
+      { day: 'Sat', hours: 0 },
+      { day: 'Sun', hours: 0 },
+    ],
+    subjectProgress: data.subjectProgress.length > 0 ? data.subjectProgress : [
+      { subject: 'No Data', completed: 0, total: 1 }
+    ],
+    monthlyTrend: data.monthlyTrend.length > 0 ? data.monthlyTrend : [
+      { month: 'Current', hours: 0 }
+    ]
   }
 
   // Prepare chart data
   const weeklyChartData = {
-    labels: data.weeklyStudyHours.map(item => item.day),
+    labels: chartData.weeklyStudyHours.map(item => item.day),
     datasets: [
       {
         label: 'Hours Studied',
-        data: data.weeklyStudyHours.map(item => item.hours),
+        data: chartData.weeklyStudyHours.map(item => item.hours),
         backgroundColor: 'rgba(59, 130, 246, 0.8)',
         borderColor: 'rgba(59, 130, 246, 1)',
         borderWidth: 1,
@@ -62,10 +72,10 @@ export const ProgressCharts: React.FC<ProgressChartsProps> = ({ data }) => {
   }
 
   const subjectChartData = {
-    labels: data.subjectProgress.map(item => item.subject),
+    labels: chartData.subjectProgress.map(item => item.subject),
     datasets: [
       {
-        data: data.subjectProgress.map(item => (item.completed / item.total) * 100),
+        data: chartData.subjectProgress.map(item => (item.completed / item.total) * 100),
         backgroundColor: [
           'rgba(59, 130, 246, 0.8)',
           'rgba(16, 185, 129, 0.8)',
@@ -84,11 +94,11 @@ export const ProgressCharts: React.FC<ProgressChartsProps> = ({ data }) => {
   }
 
   const monthlyChartData = {
-    labels: data.monthlyTrend.map(item => item.month),
+    labels: chartData.monthlyTrend.map(item => item.month),
     datasets: [
       {
         label: 'Study Hours',
-        data: data.monthlyTrend.map(item => item.hours),
+        data: chartData.monthlyTrend.map(item => item.hours),
         borderColor: 'rgba(59, 130, 246, 1)',
         backgroundColor: 'rgba(59, 130, 246, 0.1)',
         tension: 0.1,

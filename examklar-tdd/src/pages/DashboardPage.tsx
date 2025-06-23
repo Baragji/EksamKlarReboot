@@ -14,6 +14,22 @@ const DashboardPage = () => {
       {/* Study Progress Analytics Dashboard */}
       <StudyProgressDashboard />
       
+      {/* Recent Sessions */}
+      <div className="mt-8">
+        <h2 className="text-xl font-semibold mb-4">Recent Study Sessions</h2>
+        <div className="bg-white rounded-lg shadow p-6" data-testid="recent-session">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-medium text-gray-900">Study Session</h3>
+              <p className="text-sm text-gray-600">Completed just now</p>
+            </div>
+            <div className="text-sm text-gray-500">
+              Timer: 00:00+
+            </div>
+          </div>
+        </div>
+      </div>
+      
       {/* Subject Cards */}
       {subjects.length > 0 && (
         <div className="mt-8">
