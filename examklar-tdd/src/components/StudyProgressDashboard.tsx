@@ -1,9 +1,8 @@
 import { useExamStore } from '../stores/examStore'
 import { useFlashcardStore } from '../stores/flashcardStore'
 import { ProgressMetricCard, ProgressBar } from './ui/ProgressComponents'
-import { ProgressCharts } from './ProgressCharts'
+import { ProgressCharts, type ProgressChartsData } from './ProgressCharts'
 import { StudyCalendar } from './StudyCalendar'
-import type { ProgressChartsData } from './ProgressCharts'
 
 /**
  * Utility functions for the dashboard

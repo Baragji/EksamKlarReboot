@@ -1,7 +1,7 @@
 {
   "project_name": "ExamKlar - React TDD Project",
-  "last_update": "2025-06-23T16:08:03.586068",
-  "last_action": "Fixed cross-browser accessibility issue - Added tabIndex={0} to skip link in Layout.tsx to ensure proper focus behavior across Chromium, WebKit, and Mobile Safari. All 30/30 E2E tests now passing including accessibility tests on all browsers.",
+  "last_update": "2025-06-23T16:25:34.428970",
+  "last_action": "Removed unknown TypeScript compiler options 'erasableSyntaxOnly' and 'noUncheckedSideEffectImports' from tsconfig.node.json",
   "status": "active",
   "context_system": "tdd-focused",
   "methodology": "test-driven-development",

@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect, beforeEach, vi } from 'vitest'
+import '@testing-library/jest-dom'
 import StudyProgressDashboard from '../../src/components/StudyProgressDashboard'
 import { useExamStore } from '../../src/stores/examStore'
 import { useFlashcardStore } from '../../src/stores/flashcardStore'
@@ -45,6 +46,8 @@ describe('StudyProgressDashboard Component - TDD', () => {
           estimatedHours: 35
         }
       ],
+      studySessions: [],
+      scheduledSessions: [],
       getUpcomingDeadlines: vi.fn(() => [
         {
           id: '1',
@@ -53,7 +56,10 @@ describe('StudyProgressDashboard Component - TDD', () => {
           estimatedHours: 40
         }
       ]),
-      getCurrentProgress: vi.fn(() => 80)
+      getCurrentProgress: vi.fn(() => 80),
+      addScheduledSession: vi.fn(),
+      updateSession: vi.fn(),
+      deleteSession: vi.fn()
     })
 
     mockUseFlashcardStore.mockReturnValue({

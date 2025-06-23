@@ -48,10 +48,11 @@ describe('Navigation Component - TDD', () => {
     const nav = screen.getByRole('navigation')
     expect(nav).toHaveAttribute('aria-label', 'Main navigation')
 
-    // Check that all links are keyboard accessible
+    // Check that all links are keyboard accessible (links are focusable by default)
     const links = screen.getAllByRole('link')
     links.forEach(link => {
-      expect(link).toHaveAttribute('tabindex', '0')
+      expect(link).toBeInTheDocument()
+      expect(link).toHaveAttribute('href')
     })
   })
 
@@ -78,8 +79,12 @@ describe('Navigation Component - TDD', () => {
     )
 
     const nav = screen.getByRole('navigation')
-    // Check for responsive classes
-    expect(nav).toHaveClass('flex', 'space-x-4')
+    // Check for responsive classes (hidden on mobile, flex on desktop)
+    expect(nav).toHaveClass('hidden', 'md:flex', 'space-x-4')
+    
+    // Check mobile menu toggle exists
+    const mobileToggle = screen.getByTestId('mobile-menu-toggle')
+    expect(mobileToggle).toBeInTheDocument()
   })
 
   it('should display navigation icons alongside text', () => {

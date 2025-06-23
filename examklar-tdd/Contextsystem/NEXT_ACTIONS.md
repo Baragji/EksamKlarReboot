@@ -1,7 +1,7 @@
 # NEXT ACTIONS - ExamKlar TDD Project
 
 ## LAST ACTION COMPLETED
-✅ Fixed cross-browser accessibility issue - Added tabIndex={0} to skip link in Layout.tsx to ensure proper focus behavior across Chromium, WebKit, and Mobile Safari. All 30/30 E2E tests now passing including accessibility tests on all browsers. (at 2025-06-23T16:08:03.586068)
+✅ Removed unknown TypeScript compiler options 'erasableSyntaxOnly' and 'noUncheckedSideEffectImports' from tsconfig.node.json (at 2025-06-23T16:25:34.428970)
 
 ## IMMEDIATE NEXT STEPS
 1. Continue with TDD development workflow
@@ -37,5 +37,5 @@ If you're a new AI taking over:
 4. **REMEMBER**: Update context after every action!
 
 ## Context Last Updated
-2025-06-23T16:08:03.586068 - Fixed cross-browser accessibility issue - Added tabIndex={0} to skip link in Layout.tsx to ensure proper focus behavior across Chromium, WebKit, and Mobile Safari. All 30/30 E2E tests now passing including accessibility tests on all browsers.
+2025-06-23T16:25:34.428970 - Removed unknown TypeScript compiler options 'erasableSyntaxOnly' and 'noUncheckedSideEffectImports' from tsconfig.node.json
 
