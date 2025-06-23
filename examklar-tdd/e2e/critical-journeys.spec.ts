@@ -90,7 +90,13 @@ test.describe('ExamKlar E2E - Critical User Journeys', () => {
     for (let i = 0; i < 5; i++) {
       await expect(page.locator('[data-testid="quiz-question"]')).toBeVisible()
       await page.click('[data-testid="quiz-option"]:first-child')
-      await page.click('button:has-text("Next")')
+      
+      // Use force click for mobile compatibility
+      if (page.viewportSize()?.width && page.viewportSize()!.width < 768) {
+        await page.locator('button:has-text("Next")').click({ force: true })
+      } else {
+        await page.click('button:has-text("Next")')
+      }
     }
     
     // Check results

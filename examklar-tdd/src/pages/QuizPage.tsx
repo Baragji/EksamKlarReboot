@@ -105,34 +105,36 @@ const QuizPage = () => {
         
         {/* Quiz Questions */}
         {quizState === 'active' && (
-          <div className="bg-gray-50 rounded-lg p-6 mb-6">
+          <div className="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6">
             <h3 className="text-lg font-medium text-gray-800 mb-4">
               Question {currentQuestion} of {questionCount}
             </h3>
             <p data-testid="quiz-question" className="text-gray-700 mb-6">
               Sample quiz question will appear here
             </p>
-            <div className="space-y-3">
-              <button data-testid="quiz-option" className="w-full text-left bg-white border border-gray-200 rounded-lg p-3 hover:bg-blue-50 hover:border-blue-300">
+            <div className="space-y-3 mb-8">
+              <button data-testid="quiz-option" className="w-full text-left bg-white border border-gray-200 rounded-lg p-3 hover:bg-blue-50 hover:border-blue-300 touch-manipulation">
                 A) Option A
               </button>
-              <button data-testid="quiz-option" className="w-full text-left bg-white border border-gray-200 rounded-lg p-3 hover:bg-blue-50 hover:border-blue-300">
+              <button data-testid="quiz-option" className="w-full text-left bg-white border border-gray-200 rounded-lg p-3 hover:bg-blue-50 hover:border-blue-300 touch-manipulation">
                 B) Option B
               </button>
-              <button data-testid="quiz-option" className="w-full text-left bg-white border border-gray-200 rounded-lg p-3 hover:bg-blue-50 hover:border-blue-300">
+              <button data-testid="quiz-option" className="w-full text-left bg-white border border-gray-200 rounded-lg p-3 hover:bg-blue-50 hover:border-blue-300 touch-manipulation">
                 C) Option C
               </button>
-              <button data-testid="quiz-option" className="w-full text-left bg-white border border-gray-200 rounded-lg p-3 hover:bg-blue-50 hover:border-blue-300">
+              <button data-testid="quiz-option" className="w-full text-left bg-white border border-gray-200 rounded-lg p-3 hover:bg-blue-50 hover:border-blue-300 touch-manipulation">
                 D) Option D
               </button>
             </div>
             
-            <button 
-              className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700"
-              onClick={handleNextQuestion}
-            >
-              Next
-            </button>
+            <div className="pt-4 border-t border-gray-200">
+              <button 
+                className="w-full bg-blue-600 text-white px-6 py-4 rounded-lg font-medium hover:bg-blue-700 touch-manipulation"
+                onClick={handleNextQuestion}
+              >
+                Next
+              </button>
+            </div>
           </div>
         )}
         
