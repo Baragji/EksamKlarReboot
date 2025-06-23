@@ -46,6 +46,11 @@ interface ExamStore {
   studySessions: StudySession[]
   scheduledSessions: ScheduledSession[]
   
+  // Streak Counter (V5 Gamification)
+  streakCount: number
+  longestStreak: number
+  lastActivityDate: Date | null
+  
   // Actions
   setUser: (user: User) => void
   addSubject: (subject: Subject) => void
@@ -60,6 +65,10 @@ interface ExamStore {
   updateSession: (session: StudySession) => void
   deleteSession: (sessionId: string) => void
   completeSession: (sessionId: string, topicsStudied: string[]) => void
+  
+  // Streak Actions
+  recordActivity: () => void
+  getStreakMessage: () => string
   
   // Computed getters
   getUpcomingDeadlines: () => Subject[]
@@ -78,7 +87,10 @@ const initialState = {
   progress: null,
   onboardingCompleted: false,
   studySessions: [],
-  scheduledSessions: []
+  scheduledSessions: [],
+  streakCount: 0,
+  longestStreak: 0,
+  lastActivityDate: null
 }
 
 /**
@@ -206,13 +218,97 @@ export const useExamStore = create<ExamStore>()(
               createdAt: scheduledSession.createdAt
             }
             
+            // Automatically record activity when completing session (V5 Gamification)
+            const now = new Date()
+            const today = now.toDateString()
+            
+            let streakUpdate = {
+              streakCount: state.streakCount,
+              longestStreak: state.longestStreak,
+              lastActivityDate: state.lastActivityDate
+            }
+            
+            // If not already recorded activity today, update streak
+            if (!state.lastActivityDate || state.lastActivityDate.toDateString() !== today) {
+              let newStreakCount = 1
+              
+              // Check if the last activity was yesterday (consecutive days)
+              if (state.lastActivityDate) {
+                const yesterday = new Date(now)
+                yesterday.setDate(yesterday.getDate() - 1)
+                
+                if (state.lastActivityDate.toDateString() === yesterday.toDateString()) {
+                  // Consecutive day - extend streak
+                  newStreakCount = state.streakCount + 1
+                }
+              }
+              
+              streakUpdate = {
+                streakCount: newStreakCount,
+                longestStreak: Math.max(state.longestStreak, newStreakCount),
+                lastActivityDate: now
+              }
+            }
+            
             return {
               studySessions: [...state.studySessions, completedSession],
-              scheduledSessions: state.scheduledSessions.filter(s => s.id !== sessionId)
+              scheduledSessions: state.scheduledSessions.filter(s => s.id !== sessionId),
+              ...streakUpdate
             }
           }
           return state
         }, false, 'completeSession'),
+        
+        // Streak management (V5 Gamification)
+        recordActivity: () => set((state) => {
+          const now = new Date()
+          const today = now.toDateString()
+          
+          // If already recorded activity today, don't change streak
+          if (state.lastActivityDate && state.lastActivityDate.toDateString() === today) {
+            return state
+          }
+          
+          let newStreakCount = 1
+          
+          // Check if the last activity was yesterday (consecutive days)
+          if (state.lastActivityDate) {
+            const yesterday = new Date(now)
+            yesterday.setDate(yesterday.getDate() - 1)
+            
+            if (state.lastActivityDate.toDateString() === yesterday.toDateString()) {
+              // Consecutive day - extend streak
+              newStreakCount = state.streakCount + 1
+            }
+            // If not consecutive, streak resets to 1 (already set above)
+          }
+          
+          // Update longest streak if current exceeds it
+          const newLongestStreak = Math.max(state.longestStreak, newStreakCount)
+          
+          return {
+            streakCount: newStreakCount,
+            longestStreak: newLongestStreak,
+            lastActivityDate: now
+          }
+        }, false, 'recordActivity'),
+        
+        getStreakMessage: () => {
+          const state = get()
+          const { streakCount } = state
+          
+          if (streakCount === 0) {
+            return "Start your learning journey today! 🌟"
+          } else if (streakCount === 1) {
+            return "Great start! Keep it going! 🔥 Day 1"
+          } else if (streakCount === 7) {
+            return "One week strong! 💪 7 days in a row!"
+          } else if (streakCount === 30) {
+            return "Unstoppable! 🚀 30 days of dedication!"
+          } else {
+            return `Amazing streak! 🔥 ${streakCount} days in a row!`
+          }
+        },
         
         // Utility functions
         reset: () => set(initialState, false, 'reset')
