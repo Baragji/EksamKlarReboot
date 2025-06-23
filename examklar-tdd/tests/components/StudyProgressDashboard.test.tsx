@@ -94,7 +94,7 @@ describe('StudyProgressDashboard Component - TDD', () => {
     expect(screen.getByText('8 / 10 hours')).toBeInTheDocument()
     
     // Check for progress bar with correct percentage
-    const progressBar = screen.getByRole('progressbar', { name: /weekly progress/i })
+    const progressBar = screen.getByRole('progressbar', { name: /progress: 80% complete/i })
     expect(progressBar).toBeInTheDocument()
     expect(progressBar).toHaveAttribute('aria-valuenow', '80')
   })
