@@ -190,13 +190,17 @@ test.describe('ExamKlar E2E - Critical User Journeys', () => {
     
     await page.goto('/')
     
-    // Should be able to navigate with Tab key
-    await page.keyboard.press('Tab')
-    await expect(page.locator(':focus')).toBeVisible()
+    // Wait for page to be fully loaded
+    await page.waitForLoadState('networkidle')
     
-    // Skip link should be available
+    // Verify skip link exists first
+    const skipLink = page.getByTestId('skip-link')
+    await expect(skipLink).toBeVisible()
+    
+    // Skip link should be the first focusable element
     await page.keyboard.press('Tab')
     const focusedElement = page.locator(':focus')
+    await expect(focusedElement).toBeVisible()
     await expect(focusedElement).toHaveAttribute('href', '#main-content')
     
     // All interactive elements should be keyboard accessible
