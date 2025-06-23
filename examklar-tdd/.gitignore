@@ -12,6 +12,17 @@ dist
 dist-ssr
 *.local
 
+# Test results and reports
+test-results/
+playwright-report/
+coverage/
+*.coverage
+
+# E2E test artifacts
+error-context.md
+test-results.json
+playwright/.cache/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -22,3 +33,14 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Build and deploy artifacts
+build/
+out/
+.vercel/
+.netlify/
