@@ -7,9 +7,10 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/test-setup.ts',
+    exclude: ['**/node_modules/**', '**/e2e/**', '**/dist/**'],
     coverage: {
       reporter: ['text', 'json', 'html'],
-      threshold: {
+      thresholds: {
         global: {
           branches: 90,
           functions: 90,

@@ -17,8 +17,8 @@ test.describe('ExamKlar E2E - Critical User Journeys', () => {
   test('should complete full onboarding flow from start to dashboard', async ({ page }) => {
     // 🔴 RED: This will fail initially - we need to implement the flow
     
-    // Should start at onboarding page
-    await expect(page.locator('h1')).toContainText('Welcome to ExamKlar')
+    // Should start at onboarding page - use specific selector to avoid header h1
+    await expect(page.getByRole('heading', { name: 'Welcome to ExamKlar' })).toBeVisible()
     
     // Step 1: Welcome screen
     await page.click('button:has-text("Get Started")')

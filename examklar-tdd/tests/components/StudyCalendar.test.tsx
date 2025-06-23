@@ -196,6 +196,7 @@ describe('StudyCalendar Component', () => {
       
       expect(mockExamStore.addScheduledSession).toHaveBeenCalledWith({
         subjectName: 'Biology',
+        subjectId: 'default-subject',
         date: expect.any(String),
         duration: 120,
         topicsPlanned: ['Cell Biology'],

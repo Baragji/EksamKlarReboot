@@ -65,7 +65,7 @@ export const StudyCalendar = memo(() => {
 
   const handleAddSession = (formData: AddSessionFormData) => {
     // Use the first subject if available, or create a default one
-    const defaultSubjectId = subjects.length > 0 ? subjects[0].id : 'default-subject'
+    const defaultSubjectId = subjects?.length > 0 ? subjects[0].id : 'default-subject'
     
     addScheduledSession({
       ...formData,
