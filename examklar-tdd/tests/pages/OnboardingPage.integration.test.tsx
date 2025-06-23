@@ -65,16 +65,18 @@ describe('Onboarding Integration Flow', () => {
     await user.type(screen.getByLabelText(/exam date/i), '2025-08-01')
     await user.type(screen.getByLabelText(/estimated hours/i), '40')
     
-    // Click next to advance
+    // Click next to advance to step 3 (generation)
     await user.click(screen.getByRole('button', { name: /next/i }))
     
-    // Should advance to step 3
+    // Should advance to step 3 first (generation in progress)
     await waitFor(() => {
       expect(screen.getByText(/step 3/i)).toBeInTheDocument()
     })
     
-    // Should show completion screen
-    expect(screen.getByText(/you're all set/i)).toBeInTheDocument()
+    // Wait for generation to complete and advance to step 4 (completion)
+    await waitFor(() => {
+      expect(screen.getByText(/you're all set/i)).toBeInTheDocument()
+    }, { timeout: 3000 })
     
     // Should show the added subject in store
     expect(useExamStore.getState().subjects).toHaveLength(1)
@@ -98,10 +100,10 @@ describe('Onboarding Integration Flow', () => {
     await user.type(screen.getByLabelText(/estimated hours/i), '60')
     await user.click(screen.getByRole('button', { name: /next/i }))
     
-    // Step 3: Completion
+    // Step 3: Wait for generation to complete and show completion
     await waitFor(() => {
       expect(screen.getByText(/you're all set/i)).toBeInTheDocument()
-    })
+    }, { timeout: 3000 })
     
     // Should have button to go to dashboard
     expect(screen.getByRole('button', { name: /go to dashboard/i })).toBeInTheDocument()

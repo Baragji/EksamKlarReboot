@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import AchievementsList from '../../src/components/AchievementsList';
-import { useAchievementStore } from '../../src/stores/achievementStore';
+import AchievementsList from '@/components/AchievementsList';
+import { useAchievementStore } from '@/stores/achievementStore';
 
 // Mock the achievement store
 vi.mock('../../src/stores/achievementStore');

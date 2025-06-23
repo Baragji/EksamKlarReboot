@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { useAchievementStore } from '../../src/stores/achievementStore'
-import { useExamStore } from '../../src/stores/examStore'
+import { useAchievementStore } from '@/stores/achievementStore'
+import { useExamStore } from '@/stores/examStore'
 
 /**
  * Achievement Integration Tests - TDD V5 Fase 1 Day 4-5
@@ -107,7 +107,7 @@ describe('Achievement Integration - TDD V5', () => {
         type: 'scheduled'
       })
       
-      let { scheduledSessions } = useExamStore.getState()
+      const { scheduledSessions } = useExamStore.getState()
       completeSession(scheduledSessions[0].id, ['algebra'])
       
       // Session 2: 150 minutes (total: 350 minutes = 5.83 hours)

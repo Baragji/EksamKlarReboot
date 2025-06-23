@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
-import type { User, Subject, StudyPlan, Progress } from '../types'
+import type { User, Subject, StudyPlan, Progress } from '@/types'
 import { useAchievementStore, type ProgressData } from './achievementStore'
+import type { GeneratedContent } from '@/utils/dataBridge'
 
 /**
  * Study Session types
@@ -54,6 +55,9 @@ interface ExamStore {
   flashcardsReviewed: number
   recentAchievements: string[]
   
+  // DataBridge Content Generation (V5 Onboarding)
+  generatedContent: GeneratedContent | null
+  
   // Actions
   setUser: (user: User) => void
   addSubject: (subject: Subject) => void
@@ -62,6 +66,8 @@ interface ExamStore {
   updateStudyPlan: (plan: StudyPlan) => void
   updateProgress: (progress: Progress) => void
   completeOnboarding: () => void
+  setProgress: (progress: Progress) => void
+  setOnboardingCompleted: (completed: boolean) => void
   
   // Study Session Actions
   addScheduledSession: (session: Omit<ScheduledSession, 'id' | 'createdAt'>) => void
@@ -79,6 +85,11 @@ interface ExamStore {
   getRecentAchievements: () => string[]
   clearRecentAchievements: () => void
   resetStore: () => void
+  
+  // DataBridge Actions
+  storeGeneratedContent: (content: GeneratedContent) => void
+  clearGeneratedContent: () => void
+  getGeneratedContent: () => GeneratedContent | null
   
   // Computed getters
   getUpcomingDeadlines: () => Subject[]
@@ -102,7 +113,8 @@ const initialState = {
   longestStreak: 0,
   lastActivityDate: null,
   flashcardsReviewed: 0,
-  recentAchievements: [] as string[]
+  recentAchievements: [] as string[],
+  generatedContent: null
 }
 
 /**
@@ -141,6 +153,7 @@ export const useExamStore = create<ExamStore>()(
         
         // Progress management
         updateProgress: (progress) => set({ progress }, false, 'updateProgress'),
+        setProgress: (progress) => set({ progress }, false, 'setProgress'),
         
         // Computed getters
         getUpcomingDeadlines: () => {
@@ -166,6 +179,12 @@ export const useExamStore = create<ExamStore>()(
         
         // Onboarding management
         completeOnboarding: () => set({ onboardingCompleted: true }, false, 'completeOnboarding'),
+        setOnboardingCompleted: (completed) => set({ onboardingCompleted: completed }, false, 'setOnboardingCompleted'),
+        
+        // DataBridge Content Generation (V5 Onboarding)
+        storeGeneratedContent: (content) => set({ generatedContent: content }, false, 'storeGeneratedContent'),
+        clearGeneratedContent: () => set({ generatedContent: null }, false, 'clearGeneratedContent'),
+        getGeneratedContent: () => get().generatedContent,
         
         // Study Session Management
         addScheduledSession: (sessionData) => set((state) => {

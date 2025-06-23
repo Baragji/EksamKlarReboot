@@ -78,7 +78,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
       if ((event.key === 'Enter' || event.key === ' ') && props.onClick && !isDisabled) {
         event.preventDefault()
-        props.onClick(event as any)
+        // For keyboard activation, we simulate a click instead of passing the keyboard event
+        if (event.currentTarget) {
+          event.currentTarget.click()
+        }
       }
       props.onKeyDown?.(event)
     }

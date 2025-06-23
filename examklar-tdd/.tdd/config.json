@@ -1,0 +1,23 @@
+{
+  "project_name": "examklar-enterprise",
+  "roadmap_version": "2025.1",
+  "current_phase": "PHASE_1_FOUNDATION_STABILIZATION",
+  "tdd_rules": {
+    "enforce_red_first": true,
+    "require_test_before_code": true,
+    "minimum_coverage": 95,
+    "max_refactor_without_test": 0
+  },
+  "performance_targets": {
+    "api_response_time_ms": 200,
+    "page_load_time_s": 2,
+    "test_coverage_percent": 95,
+    "uptime_percent": 99.9
+  },
+  "ai_service_config": {
+    "content_processing_timeout_s": 30,
+    "ai_response_timeout_s": 5,
+    "fallback_enabled": true,
+    "quality_threshold": 0.85
+  }
+}

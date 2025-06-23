@@ -81,6 +81,10 @@ interface FlashcardStore {
   importDeck: (jsonData: string) => FlashcardDeck
   validateDeckData: (data: unknown) => boolean
   
+  // Data Export/Import (V5 Fase 3)
+  addDeck: (deck: FlashcardDeck) => void
+  clearAllDecks: () => void
+  
   // Utility
   reset: () => void
 }
@@ -149,6 +153,17 @@ export const useFlashcardStore = create<FlashcardStore>()(
         getDecks: () => {
           const state = get()
           return state.decks
+        },
+        
+        // Data Export/Import Operations (V5 Fase 3)
+        addDeck: (deck) => {
+          set((state) => ({
+            decks: [...state.decks, deck]
+          }), false, 'addDeck')
+        },
+        
+        clearAllDecks: () => {
+          set({ decks: [] }, false, 'clearAllDecks')
         },
         
         // Card Management within Decks

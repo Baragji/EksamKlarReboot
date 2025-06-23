@@ -1,8 +1,8 @@
-import { useExamStore } from '../stores/examStore'
-import { useFlashcardStore } from '../stores/flashcardStore'
-import { ProgressMetricCard, ProgressBar } from './ui/ProgressComponents'
-import { ProgressCharts, type ProgressChartsData } from './ProgressCharts'
-import { StudyCalendar } from './StudyCalendar'
+import { useExamStore } from '@/stores/examStore'
+import { useFlashcardStore } from '@/stores/flashcardStore'
+import { ProgressMetricCard, ProgressBar } from '@/components/ui/ProgressComponents'
+import { ProgressCharts, type ProgressChartsData } from '@/components/ProgressCharts'
+import { StudyCalendar } from '@/components/StudyCalendar'
 
 /**
  * Utility functions for the dashboard
@@ -27,7 +27,6 @@ const StudyProgressDashboard = () => {
     getUpcomingDeadlines,
     // V5 Gamification: Streak Counter Integration
     streakCount,
-    longestStreak,
     getStreakMessage
   } = useExamStore()
   
