@@ -1,10 +1,30 @@
 import { useExamStore } from '../stores/examStore'
 import { useFlashcardStore } from '../stores/flashcardStore'
+import { ProgressMetricCard, ProgressBar } from './ui/ProgressComponents'
+
+/**
+ * Utility functions for the dashboard
+ */
+const getStreakMessage = (streak: number): string => {
+  if (streak >= 7) return `Great streak! Keep it up! 🔥`
+  if (streak >= 3) return `Building momentum! 💪`
+  if (streak >= 1) return `Good start! 👍`
+  return 'Ready to start your streak?'
+}
+
+const formatTime = (minutes: number): string => {
+  return `${Math.floor(minutes / 60)} hours`
+}
+
+const calculateEfficiency = (totalMinutes: number, sessions: number): string => {
+  if (sessions === 0) return '0'
+  return (totalMinutes / 60 / sessions).toFixed(1)
+}
 
 /**
  * StudyProgressDashboard Component
  * Displays comprehensive study analytics and progress tracking
- * Following TDD-first development approach
+ * Following TDD-first development approach with refactored reusable components
  */
 const StudyProgressDashboard = () => {
   const { 
@@ -24,46 +44,41 @@ const StudyProgressDashboard = () => {
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Study Progress Dashboard</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-blue-50 rounded-lg p-4">
-            <h3 className="text-sm font-medium text-blue-900 mb-2">Total Study Time</h3>
-            <p className="text-2xl font-bold text-blue-600">0 hours</p>
-          </div>
-          
-          <div className="bg-green-50 rounded-lg p-4">
-            <h3 className="text-sm font-medium text-green-900 mb-2">Sessions Completed</h3>
-            <p className="text-2xl font-bold text-green-600">No sessions yet</p>
-          </div>
-          
-          <div className="bg-purple-50 rounded-lg p-4">
-            <h3 className="text-sm font-medium text-purple-900 mb-2">Current Streak</h3>
-            <p className="text-2xl font-bold text-purple-600">0 days</p>
-          </div>
-          
-          <div className="bg-orange-50 rounded-lg p-4">
-            <h3 className="text-sm font-medium text-orange-900 mb-2">Study Efficiency</h3>
-            <p className="text-2xl font-bold text-orange-600">Start your study journey!</p>
-          </div>
+          <ProgressMetricCard
+            title="Total Study Time"
+            value="0 hours"
+            bgColor="bg-blue-50"
+            textColor="text-blue-600"
+          />
+          <ProgressMetricCard
+            title="Sessions Completed"
+            value="No sessions yet"
+            bgColor="bg-green-50"
+            textColor="text-green-600"
+          />
+          <ProgressMetricCard
+            title="Current Streak"
+            value="0 days"
+            bgColor="bg-purple-50"
+            textColor="text-purple-600"
+          />
+          <ProgressMetricCard
+            title="Study Efficiency"
+            value="Start your study journey!"
+            bgColor="bg-orange-50"
+            textColor="text-orange-600"
+          />
         </div>
         
         <div className="mb-8">
           <h3 className="text-lg font-semibold mb-4">Weekly Goal</h3>
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-gray-600">Progress</span>
-              <span className="text-sm font-medium">0 / 0 hours</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-3">
-              <div 
-                className="bg-blue-600 h-3 rounded-full"
-                style={{ width: '0%' }}
-                role="progressbar"
-                aria-valuenow={0}
-                aria-valuemin={0}
-                aria-valuemax={100}
-                aria-label="Weekly progress: 0% complete"
-              />
-            </div>
-          </div>
+          <ProgressBar
+            percentage={0}
+            label="Progress"
+            current={0}
+            target={0}
+            unit="hours"
+          />
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -98,21 +113,11 @@ const StudyProgressDashboard = () => {
   }
 
   // Calculate metrics
-  const totalHours = Math.floor(progress.totalStudyTime / 60)
+  const totalHours = formatTime(progress.totalStudyTime)
   const weeklyHoursCompleted = Math.floor(progress.weeklyProgress / 60)
   const weeklyHoursGoal = Math.floor(progress.weeklyGoal / 60)
   const weeklyProgressPercent = (progress.weeklyProgress / progress.weeklyGoal) * 100
-  const studyEfficiency = progress.sessionsCompleted > 0 
-    ? (progress.totalStudyTime / 60 / progress.sessionsCompleted).toFixed(1)
-    : '0'
-
-  // Motivational message based on streak
-  const getStreakMessage = (streak: number) => {
-    if (streak >= 7) return `Great streak! Keep it up! 🔥`
-    if (streak >= 3) return `Building momentum! 💪`
-    if (streak >= 1) return `Good start! 👍`
-    return 'Ready to start your streak?'
-  }
+  const studyEfficiency = calculateEfficiency(progress.totalStudyTime, progress.sessionsCompleted)
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
@@ -120,48 +125,43 @@ const StudyProgressDashboard = () => {
       
       {/* Key Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-blue-50 rounded-lg p-4">
-          <h3 className="text-sm font-medium text-blue-900 mb-2">Total Study Time</h3>
-          <p className="text-2xl font-bold text-blue-600">{totalHours} hours</p>
-        </div>
-        
-        <div className="bg-green-50 rounded-lg p-4">
-          <h3 className="text-sm font-medium text-green-900 mb-2">Sessions Completed</h3>
-          <p className="text-2xl font-bold text-green-600">{progress.sessionsCompleted}</p>
-        </div>
-        
-        <div className="bg-purple-50 rounded-lg p-4">
-          <h3 className="text-sm font-medium text-purple-900 mb-2">Current Streak</h3>
-          <p className="text-2xl font-bold text-purple-600">{progress.streakCount} days</p>
-          <p className="text-xs text-purple-700 mt-1">{getStreakMessage(progress.streakCount)}</p>
-        </div>
-        
-        <div className="bg-orange-50 rounded-lg p-4">
-          <h3 className="text-sm font-medium text-orange-900 mb-2">Study Efficiency</h3>
-          <p className="text-2xl font-bold text-orange-600">{studyEfficiency} hours/session</p>
-        </div>
+        <ProgressMetricCard
+          title="Total Study Time"
+          value={totalHours}
+          bgColor="bg-blue-50"
+          textColor="text-blue-600"
+        />
+        <ProgressMetricCard
+          title="Sessions Completed"
+          value={progress.sessionsCompleted}
+          bgColor="bg-green-50"
+          textColor="text-green-600"
+        />
+        <ProgressMetricCard
+          title="Current Streak"
+          value={`${progress.streakCount} days`}
+          bgColor="bg-purple-50"
+          textColor="text-purple-600"
+          subtitle={getStreakMessage(progress.streakCount)}
+        />
+        <ProgressMetricCard
+          title="Study Efficiency"
+          value={`${studyEfficiency} hours/session`}
+          bgColor="bg-orange-50"
+          textColor="text-orange-600"
+        />
       </div>
       
       {/* Weekly Goal Progress */}
       <div className="mb-8">
         <h3 className="text-lg font-semibold mb-4">Weekly Goal</h3>
-        <div className="bg-gray-50 rounded-lg p-4">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm text-gray-600">Progress</span>
-            <span className="text-sm font-medium">{weeklyHoursCompleted} / {weeklyHoursGoal} hours</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-3">
-            <div 
-              className="bg-blue-600 h-3 rounded-full transition-all duration-300"
-              style={{ width: `${Math.min(Math.max(weeklyProgressPercent, 0), 100)}%` }}
-              role="progressbar"
-              aria-valuenow={Math.round(weeklyProgressPercent)}
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-label={`Weekly progress: ${Math.round(weeklyProgressPercent)}% complete`}
-            />
-          </div>
-        </div>
+        <ProgressBar
+          percentage={weeklyProgressPercent}
+          label="Progress"
+          current={weeklyHoursCompleted}
+          target={weeklyHoursGoal}
+          unit="hours"
+        />
       </div>
       
       {/* Two Column Layout */}
