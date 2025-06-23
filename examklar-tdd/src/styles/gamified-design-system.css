@@ -199,6 +199,30 @@
   box-shadow: var(--shadow-gamified-xl);
 }
 
+/* Button Sizes */
+.btn-gamified-small {
+  padding: var(--spacing-gamified-sm) var(--spacing-gamified-lg);
+  font-size: 0.875rem;
+  border-radius: var(--radius-gamified-md);
+}
+
+.btn-gamified-large {
+  padding: var(--spacing-gamified-xl) var(--spacing-gamified-3xl);
+  font-size: 1.25rem;
+  border-radius: var(--radius-gamified-2xl);
+  font-weight: var(--font-weight-extrabold);
+}
+
+/* Button States */
+.btn-gamified-loading {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.btn-gamified-loading:hover {
+  transform: none;
+}
+
 /* Rounded Corners */
 .rounded-gamified {
   border-radius: var(--radius-gamified-xl);
@@ -285,6 +309,87 @@
 
 .interactive-gamified:active {
   transform: scale(0.98);
+}
+
+/* Input Variants */
+.input-gamified {
+  background: var(--gamified-white);
+  border: 2px solid var(--gamified-gray-200);
+  border-radius: var(--radius-gamified-lg);
+  padding: var(--spacing-gamified-lg) var(--spacing-gamified-xl);
+  font-family: var(--font-gamified);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-gamified-normal);
+  box-shadow: var(--shadow-gamified-sm);
+}
+
+.input-gamified:focus {
+  border-color: var(--gamified-blue);
+  box-shadow: var(--shadow-gamified-md);
+  transform: translateY(-1px);
+}
+
+.input-gamified-success {
+  background: var(--gamified-white);
+  border: 2px solid var(--gamified-green);
+  border-radius: var(--radius-gamified-lg);
+  padding: var(--spacing-gamified-lg) var(--spacing-gamified-xl);
+  font-family: var(--font-gamified);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-gamified-normal);
+  box-shadow: var(--shadow-gamified-sm);
+}
+
+.input-gamified-success:focus {
+  border-color: var(--gamified-green-light);
+  box-shadow: var(--shadow-gamified-md);
+  transform: translateY(-1px);
+}
+
+.input-gamified-error {
+  background: var(--gamified-white);
+  border: 2px solid var(--gamified-red);
+  border-radius: var(--radius-gamified-lg);
+  padding: var(--spacing-gamified-lg) var(--spacing-gamified-xl);
+  font-family: var(--font-gamified);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-gamified-normal);
+  box-shadow: var(--shadow-gamified-sm);
+}
+
+.input-gamified-error:focus {
+  border-color: var(--gamified-red-light);
+  box-shadow: var(--shadow-gamified-md);
+  transform: translateY(-1px);
+}
+
+/* Input Sizes */
+.input-gamified-small {
+  padding: var(--spacing-gamified-sm) var(--spacing-gamified-md);
+  font-size: 0.875rem;
+  border-radius: var(--radius-gamified-md);
+}
+
+.input-gamified-large {
+  padding: var(--spacing-gamified-xl) var(--spacing-gamified-2xl);
+  font-size: 1.125rem;
+  border-radius: var(--radius-gamified-xl);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Focus Effects */
+.focus-gamified:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: var(--gamified-blue);
+  ring-offset: 2px;
+}
+
+/* Helper Text */
+.text-gamified-helper {
+  color: var(--gamified-gray-600);
+  font-family: var(--font-gamified);
+  font-weight: var(--font-weight-medium);
 }
 
 /* Main Content Area */

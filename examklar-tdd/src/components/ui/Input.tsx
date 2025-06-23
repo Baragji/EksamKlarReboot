@@ -7,18 +7,25 @@ import { cva, type VariantProps } from 'class-variance-authority'
  */
 const inputVariants = cva(
   // Base styles applied to all inputs
-  'w-full rounded-md border px-3 py-2 text-sm transition-colors placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed',
+  'w-full rounded-md border px-3 py-2 text-sm transition-all duration-300 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed',
   {
     variants: {
       variant: {
         default: 'border-gray-300 focus:border-blue-500',
         error: 'border-red-500 focus:border-red-500 focus:ring-red-500',
-        success: 'border-green-500 focus:border-green-500 focus:ring-green-500'
+        success: 'border-green-500 focus:border-green-500 focus:ring-green-500',
+        // Gamified variants
+        'gamified': 'input-gamified focus-gamified',
+        'gamified-success': 'input-gamified-success focus-gamified',
+        'gamified-error': 'input-gamified-error focus-gamified'
       },
       size: {
         sm: 'h-8 text-xs px-2',
         md: 'h-10 text-sm px-3',
-        lg: 'h-12 text-base px-4'
+        lg: 'h-12 text-base px-4',
+        // Gamified sizes
+        'gamified-small': 'input-gamified-small',
+        'gamified-large': 'input-gamified-large'
       }
     },
     defaultVariants: {
@@ -45,6 +52,10 @@ export interface InputProps
   helpText?: string
   /** Additional CSS classes to apply */
   className?: string
+  /** Icon to display in input */
+  icon?: string
+  /** Position of icon relative to input */
+  iconPosition?: 'left' | 'right'
 }
 
 /**
@@ -70,6 +81,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     helpText, 
     required,
     id,
+    icon,
+    iconPosition = 'left',
+    type = 'text',
     ...props 
   }, ref) => {
     // Generate unique ID - call hook unconditionally
@@ -85,6 +99,19 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       helpText && `${inputId}-help`
     ].filter(Boolean).join(' ') || undefined
 
+    const inputElement = (
+      <input
+        ref={ref}
+        type={type}
+        id={inputId}
+        className={inputVariants({ variant: computedVariant, size, className })}
+        aria-required={required}
+        aria-invalid={!!error}
+        aria-describedby={describedBy}
+        {...props}
+      />
+    )
+
     return (
       <div className="space-y-1">
         {/* Label */}
@@ -98,16 +125,26 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           </label>
         )}
         
-        {/* Input */}
-        <input
-          ref={ref}
-          id={inputId}
-          className={inputVariants({ variant: computedVariant, size, className })}
-          aria-required={required}
-          aria-invalid={!!error}
-          aria-describedby={describedBy}
-          {...props}
-        />
+        {/* Input with optional icon */}
+        {icon ? (
+          <div className="relative">
+            {iconPosition === 'left' && (
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                {icon}
+              </span>
+            )}
+            {React.cloneElement(inputElement, {
+              className: `${inputElement.props.className} ${iconPosition === 'left' ? 'pl-10' : iconPosition === 'right' ? 'pr-10' : ''}`
+            })}
+            {iconPosition === 'right' && (
+              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                {icon}
+              </span>
+            )}
+          </div>
+        ) : (
+          inputElement
+        )}
         
         {/* Error Message */}
         {error && (
@@ -124,7 +161,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {helpText && !error && (
           <p 
             id={`${inputId}-help`}
-            className="text-sm text-gray-500"
+            className={`text-sm text-gray-500 ${variant?.includes('gamified') ? 'text-gamified-helper' : ''}`}
           >
             {helpText}
           </p>
