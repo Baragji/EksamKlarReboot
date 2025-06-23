@@ -1,0 +1,312 @@
+/* ===== GAMIFIED DESIGN SYSTEM ===== */
+/* Modern, energetic, gamified design for young users */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* ===== GAMIFIED COLOR PALETTE ===== */
+  
+  /* Primary Gamified Colors - Vibrant and energetic */
+  --gamified-red: #e21b3c;
+  --gamified-red-light: #ff4757;
+  --gamified-red-dark: #c0392b;
+  
+  --gamified-blue: #1368ce;
+  --gamified-blue-light: #3498db;
+  --gamified-blue-dark: #2c3e50;
+  
+  --gamified-yellow: #ffa602;
+  --gamified-yellow-light: #f39c12;
+  --gamified-yellow-dark: #e67e22;
+  
+  --gamified-green: #26890c;
+  --gamified-green-light: #2ecc71;
+  --gamified-green-dark: #27ae60;
+  
+  --gamified-purple: #9c2bde;
+  --gamified-purple-light: #9b59b6;
+  --gamified-purple-dark: #8e44ad;
+
+  /* Neutral Colors */
+  --gamified-white: #ffffff;
+  --gamified-gray-50: #f8fafc;
+  --gamified-gray-100: #f1f5f9;
+  --gamified-gray-200: #e2e8f0;
+  --gamified-gray-300: #cbd5e1;
+  --gamified-gray-400: #94a3b8;
+  --gamified-gray-500: #64748b;
+  --gamified-gray-600: #475569;
+  --gamified-gray-700: #334155;
+  --gamified-gray-800: #1e293b;
+  --gamified-gray-900: #0f172a;
+
+  /* ===== GAMIFIED GRADIENTS ===== */
+  
+  --gradient-gamified-primary: linear-gradient(135deg, var(--gamified-purple) 0%, var(--gamified-blue) 50%, var(--gamified-green) 100%);
+  --gradient-gamified-warm: linear-gradient(135deg, var(--gamified-red) 0%, var(--gamified-yellow) 100%);
+  --gradient-gamified-cool: linear-gradient(135deg, var(--gamified-blue) 0%, var(--gamified-purple) 100%);
+  --gradient-gamified-success: linear-gradient(135deg, var(--gamified-green-light) 0%, var(--gamified-green) 100%);
+  --gradient-gamified-danger: linear-gradient(135deg, var(--gamified-red-light) 0%, var(--gamified-red) 100%);
+
+  /* ===== TYPOGRAPHY ===== */
+  
+  --font-gamified: 'Inter', system-ui, sans-serif;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* ===== SPACING & SIZING ===== */
+  
+  --spacing-gamified-xs: 0.5rem;   /* 8px */
+  --spacing-gamified-sm: 0.75rem;  /* 12px */
+  --spacing-gamified-md: 1rem;     /* 16px */
+  --spacing-gamified-lg: 1.5rem;   /* 24px */
+  --spacing-gamified-xl: 2rem;     /* 32px */
+  --spacing-gamified-2xl: 3rem;    /* 48px */
+  --spacing-gamified-3xl: 4rem;    /* 64px */
+
+  /* ===== BORDER RADIUS ===== */
+  
+  --radius-gamified-sm: 0.5rem;    /* 8px */
+  --radius-gamified-md: 0.75rem;   /* 12px */
+  --radius-gamified-lg: 1rem;      /* 16px */
+  --radius-gamified-xl: 1.5rem;    /* 24px */
+  --radius-gamified-2xl: 2rem;     /* 32px */
+  --radius-gamified-full: 9999px;
+
+  /* ===== SHADOWS ===== */
+  
+  --shadow-gamified-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  --shadow-gamified-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-gamified-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-gamified-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-gamified-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  /* ===== ANIMATIONS ===== */
+  
+  --transition-gamified-fast: 0.15s ease-out;
+  --transition-gamified-normal: 0.3s ease-out;
+  --transition-gamified-slow: 0.5s ease-out;
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+/* Background Gradients */
+.bg-gradient-gamified-primary {
+  background: var(--gradient-gamified-primary);
+}
+
+.bg-gradient-gamified-warm {
+  background: var(--gradient-gamified-warm);
+}
+
+.bg-gradient-gamified-cool {
+  background: var(--gradient-gamified-cool);
+}
+
+.bg-gradient-gamified-success {
+  background: var(--gradient-gamified-success);
+}
+
+.bg-gradient-gamified-danger {
+  background: var(--gradient-gamified-danger);
+}
+
+/* Solid Background Colors */
+.bg-gamified-red { background-color: var(--gamified-red); }
+.bg-gamified-blue { background-color: var(--gamified-blue); }
+.bg-gamified-yellow { background-color: var(--gamified-yellow); }
+.bg-gamified-green { background-color: var(--gamified-green); }
+.bg-gamified-purple { background-color: var(--gamified-purple); }
+
+/* Button Variants */
+.btn-gamified-primary {
+  background: var(--gradient-gamified-primary);
+  color: var(--gamified-white);
+  padding: var(--spacing-gamified-lg) var(--spacing-gamified-2xl);
+  border-radius: var(--radius-gamified-xl);
+  font-weight: var(--font-weight-bold);
+  font-size: 1.125rem;
+  box-shadow: var(--shadow-gamified-lg);
+  transition: all var(--transition-gamified-normal);
+  border: none;
+  cursor: pointer;
+  text-transform: none;
+  font-family: var(--font-gamified);
+}
+
+.btn-gamified-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gamified-xl);
+}
+
+.btn-gamified-secondary {
+  background: var(--gamified-white);
+  color: var(--gamified-gray-700);
+  padding: var(--spacing-gamified-lg) var(--spacing-gamified-2xl);
+  border-radius: var(--radius-gamified-xl);
+  font-weight: var(--font-weight-semibold);
+  font-size: 1.125rem;
+  box-shadow: var(--shadow-gamified-md);
+  transition: all var(--transition-gamified-normal);
+  border: 2px solid var(--gamified-gray-200);
+  cursor: pointer;
+  font-family: var(--font-gamified);
+}
+
+.btn-gamified-secondary:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-gamified-lg);
+  border-color: var(--gamified-gray-300);
+}
+
+.btn-gamified-success {
+  background: var(--gradient-gamified-success);
+  color: var(--gamified-white);
+  padding: var(--spacing-gamified-lg) var(--spacing-gamified-2xl);
+  border-radius: var(--radius-gamified-xl);
+  font-weight: var(--font-weight-bold);
+  font-size: 1.125rem;
+  box-shadow: var(--shadow-gamified-lg);
+  transition: all var(--transition-gamified-normal);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-gamified);
+}
+
+.btn-gamified-success:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gamified-xl);
+}
+
+.btn-gamified-danger {
+  background: var(--gradient-gamified-danger);
+  color: var(--gamified-white);
+  padding: var(--spacing-gamified-lg) var(--spacing-gamified-2xl);
+  border-radius: var(--radius-gamified-xl);
+  font-weight: var(--font-weight-bold);
+  font-size: 1.125rem;
+  box-shadow: var(--shadow-gamified-lg);
+  transition: all var(--transition-gamified-normal);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-gamified);
+}
+
+.btn-gamified-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gamified-xl);
+}
+
+/* Rounded Corners */
+.rounded-gamified {
+  border-radius: var(--radius-gamified-xl);
+}
+
+/* Shadows */
+.shadow-gamified {
+  box-shadow: var(--shadow-gamified-lg);
+}
+
+/* Hover Effects */
+.hover-lift {
+  transition: transform var(--transition-gamified-normal);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+/* Typography */
+.text-gamified-heading {
+  font-family: var(--font-gamified);
+  font-weight: var(--font-weight-extrabold);
+  font-size: 2.25rem;
+  line-height: 1.2;
+  color: var(--gamified-gray-900);
+}
+
+.text-gamified-body {
+  font-family: var(--font-gamified);
+  font-weight: var(--font-weight-medium);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--gamified-gray-700);
+}
+
+.font-gamified-bold {
+  font-weight: var(--font-weight-bold);
+}
+
+.font-gamified-medium {
+  font-weight: var(--font-weight-medium);
+}
+
+/* Card Styles */
+.card-gamified {
+  background: var(--gamified-white);
+  border-radius: var(--radius-gamified-xl);
+  box-shadow: var(--shadow-gamified-lg);
+  padding: var(--spacing-gamified-2xl);
+  transition: all var(--transition-gamified-normal);
+}
+
+.card-gamified:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gamified-xl);
+}
+
+/* Progress Bars */
+.progress-gamified {
+  background: var(--gamified-gray-200);
+  border-radius: var(--radius-gamified-full);
+  height: 0.75rem;
+  overflow: hidden;
+}
+
+.progress-gamified-fill {
+  background: var(--gradient-gamified-primary);
+  height: 100%;
+  border-radius: var(--radius-gamified-full);
+  transition: width var(--transition-gamified-slow);
+}
+
+/* Interactive Elements */
+.interactive-gamified {
+  cursor: pointer;
+  transition: all var(--transition-gamified-normal);
+  user-select: none;
+}
+
+.interactive-gamified:hover {
+  transform: scale(1.02);
+}
+
+.interactive-gamified:active {
+  transform: scale(0.98);
+}
+
+/* Main Content Area */
+.gamified-main-content {
+  padding: var(--spacing-gamified-lg);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .btn-gamified-primary,
+  .btn-gamified-secondary,
+  .btn-gamified-success,
+  .btn-gamified-danger {
+    padding: var(--spacing-gamified-md) var(--spacing-gamified-xl);
+    font-size: 1rem;
+  }
+  
+  .text-gamified-heading {
+    font-size: 1.875rem;
+  }
+  
+  .card-gamified {
+    padding: var(--spacing-gamified-xl);
+  }
+}

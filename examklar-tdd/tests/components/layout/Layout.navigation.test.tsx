@@ -38,7 +38,7 @@ describe('Layout Component - Navigation Integration TDD', () => {
     const header = nav.closest('header')
     
     expect(header).toBeInTheDocument()
-    expect(header).toHaveClass('bg-white', 'shadow-lg')
+    expect(header).toHaveClass('card-gamified')
   })
 
   it('should maintain existing layout structure with new navigation', () => {
@@ -54,7 +54,7 @@ describe('Layout Component - Navigation Integration TDD', () => {
     
     // Check that the layout structure is preserved
     const main = screen.getByRole('main')
-    expect(main).toHaveClass('py-8')
+    expect(main).toHaveClass('gamified-main-content')
   })
 
   it('should have responsive navigation layout', () => {

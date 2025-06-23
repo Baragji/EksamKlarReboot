@@ -1,0 +1,307 @@
+/* ===== KAHOOT-STYLE DESIGN SYSTEM ===== */
+/* Modern, energetic, gamified design for young users */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* ===== KAHOOT COLOR PALETTE ===== */
+  
+  /* Primary Kahoot Colors - Vibrant and energetic */
+  --kahoot-red: #e21b3c;
+  --kahoot-red-light: #ff4757;
+  --kahoot-red-dark: #c0392b;
+  
+  --kahoot-blue: #1368ce;
+  --kahoot-blue-light: #3498db;
+  --kahoot-blue-dark: #2c3e50;
+  
+  --kahoot-yellow: #ffa602;
+  --kahoot-yellow-light: #f39c12;
+  --kahoot-yellow-dark: #e67e22;
+  
+  --kahoot-green: #26890c;
+  --kahoot-green-light: #2ecc71;
+  --kahoot-green-dark: #27ae60;
+  
+  --kahoot-purple: #9c2bde;
+  --kahoot-purple-light: #9b59b6;
+  --kahoot-purple-dark: #8e44ad;
+
+  /* Neutral Colors */
+  --kahoot-white: #ffffff;
+  --kahoot-gray-50: #f8fafc;
+  --kahoot-gray-100: #f1f5f9;
+  --kahoot-gray-200: #e2e8f0;
+  --kahoot-gray-300: #cbd5e1;
+  --kahoot-gray-400: #94a3b8;
+  --kahoot-gray-500: #64748b;
+  --kahoot-gray-600: #475569;
+  --kahoot-gray-700: #334155;
+  --kahoot-gray-800: #1e293b;
+  --kahoot-gray-900: #0f172a;
+
+  /* ===== KAHOOT GRADIENTS ===== */
+  
+  --gradient-kahoot-primary: linear-gradient(135deg, var(--kahoot-purple) 0%, var(--kahoot-blue) 50%, var(--kahoot-green) 100%);
+  --gradient-kahoot-warm: linear-gradient(135deg, var(--kahoot-red) 0%, var(--kahoot-yellow) 100%);
+  --gradient-kahoot-cool: linear-gradient(135deg, var(--kahoot-blue) 0%, var(--kahoot-purple) 100%);
+  --gradient-kahoot-success: linear-gradient(135deg, var(--kahoot-green-light) 0%, var(--kahoot-green) 100%);
+  --gradient-kahoot-danger: linear-gradient(135deg, var(--kahoot-red-light) 0%, var(--kahoot-red) 100%);
+
+  /* ===== TYPOGRAPHY ===== */
+  
+  --font-kahoot: 'Inter', system-ui, sans-serif;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* ===== SPACING & SIZING ===== */
+  
+  --spacing-kahoot-xs: 0.5rem;   /* 8px */
+  --spacing-kahoot-sm: 0.75rem;  /* 12px */
+  --spacing-kahoot-md: 1rem;     /* 16px */
+  --spacing-kahoot-lg: 1.5rem;   /* 24px */
+  --spacing-kahoot-xl: 2rem;     /* 32px */
+  --spacing-kahoot-2xl: 3rem;    /* 48px */
+  --spacing-kahoot-3xl: 4rem;    /* 64px */
+
+  /* ===== BORDER RADIUS ===== */
+  
+  --radius-kahoot-sm: 0.5rem;    /* 8px */
+  --radius-kahoot-md: 0.75rem;   /* 12px */
+  --radius-kahoot-lg: 1rem;      /* 16px */
+  --radius-kahoot-xl: 1.5rem;    /* 24px */
+  --radius-kahoot-2xl: 2rem;     /* 32px */
+  --radius-kahoot-full: 9999px;
+
+  /* ===== SHADOWS ===== */
+  
+  --shadow-kahoot-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  --shadow-kahoot-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-kahoot-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-kahoot-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-kahoot-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  /* ===== ANIMATIONS ===== */
+  
+  --transition-kahoot-fast: 0.15s ease-out;
+  --transition-kahoot-normal: 0.3s ease-out;
+  --transition-kahoot-slow: 0.5s ease-out;
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+/* Background Gradients */
+.bg-gradient-kahoot-primary {
+  background: var(--gradient-kahoot-primary);
+}
+
+.bg-gradient-kahoot-warm {
+  background: var(--gradient-kahoot-warm);
+}
+
+.bg-gradient-kahoot-cool {
+  background: var(--gradient-kahoot-cool);
+}
+
+.bg-gradient-kahoot-success {
+  background: var(--gradient-kahoot-success);
+}
+
+.bg-gradient-kahoot-danger {
+  background: var(--gradient-kahoot-danger);
+}
+
+/* Solid Background Colors */
+.bg-kahoot-red { background-color: var(--kahoot-red); }
+.bg-kahoot-blue { background-color: var(--kahoot-blue); }
+.bg-kahoot-yellow { background-color: var(--kahoot-yellow); }
+.bg-kahoot-green { background-color: var(--kahoot-green); }
+.bg-kahoot-purple { background-color: var(--kahoot-purple); }
+
+/* Button Variants */
+.btn-kahoot-primary {
+  background: var(--gradient-kahoot-primary);
+  color: var(--kahoot-white);
+  padding: var(--spacing-kahoot-lg) var(--spacing-kahoot-2xl);
+  border-radius: var(--radius-kahoot-xl);
+  font-weight: var(--font-weight-bold);
+  font-size: 1.125rem;
+  box-shadow: var(--shadow-kahoot-lg);
+  transition: all var(--transition-kahoot-normal);
+  border: none;
+  cursor: pointer;
+  text-transform: none;
+  font-family: var(--font-kahoot);
+}
+
+.btn-kahoot-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-kahoot-xl);
+}
+
+.btn-kahoot-secondary {
+  background: var(--kahoot-white);
+  color: var(--kahoot-gray-700);
+  padding: var(--spacing-kahoot-lg) var(--spacing-kahoot-2xl);
+  border-radius: var(--radius-kahoot-xl);
+  font-weight: var(--font-weight-semibold);
+  font-size: 1.125rem;
+  box-shadow: var(--shadow-kahoot-md);
+  transition: all var(--transition-kahoot-normal);
+  border: 2px solid var(--kahoot-gray-200);
+  cursor: pointer;
+  font-family: var(--font-kahoot);
+}
+
+.btn-kahoot-secondary:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-kahoot-lg);
+  border-color: var(--kahoot-gray-300);
+}
+
+.btn-kahoot-success {
+  background: var(--gradient-kahoot-success);
+  color: var(--kahoot-white);
+  padding: var(--spacing-kahoot-lg) var(--spacing-kahoot-2xl);
+  border-radius: var(--radius-kahoot-xl);
+  font-weight: var(--font-weight-bold);
+  font-size: 1.125rem;
+  box-shadow: var(--shadow-kahoot-lg);
+  transition: all var(--transition-kahoot-normal);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-kahoot);
+}
+
+.btn-kahoot-success:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-kahoot-xl);
+}
+
+.btn-kahoot-danger {
+  background: var(--gradient-kahoot-danger);
+  color: var(--kahoot-white);
+  padding: var(--spacing-kahoot-lg) var(--spacing-kahoot-2xl);
+  border-radius: var(--radius-kahoot-xl);
+  font-weight: var(--font-weight-bold);
+  font-size: 1.125rem;
+  box-shadow: var(--shadow-kahoot-lg);
+  transition: all var(--transition-kahoot-normal);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-kahoot);
+}
+
+.btn-kahoot-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-kahoot-xl);
+}
+
+/* Rounded Corners */
+.rounded-kahoot {
+  border-radius: var(--radius-kahoot-xl);
+}
+
+/* Shadows */
+.shadow-kahoot {
+  box-shadow: var(--shadow-kahoot-lg);
+}
+
+/* Hover Effects */
+.hover-lift {
+  transition: transform var(--transition-kahoot-normal);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+/* Typography */
+.text-kahoot-heading {
+  font-family: var(--font-kahoot);
+  font-weight: var(--font-weight-extrabold);
+  font-size: 2.25rem;
+  line-height: 1.2;
+  color: var(--kahoot-gray-900);
+}
+
+.text-kahoot-body {
+  font-family: var(--font-kahoot);
+  font-weight: var(--font-weight-medium);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--kahoot-gray-700);
+}
+
+.font-kahoot-bold {
+  font-weight: var(--font-weight-bold);
+}
+
+.font-kahoot-medium {
+  font-weight: var(--font-weight-medium);
+}
+
+/* Card Styles */
+.card-kahoot {
+  background: var(--kahoot-white);
+  border-radius: var(--radius-kahoot-xl);
+  box-shadow: var(--shadow-kahoot-lg);
+  padding: var(--spacing-kahoot-2xl);
+  transition: all var(--transition-kahoot-normal);
+}
+
+.card-kahoot:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-kahoot-xl);
+}
+
+/* Progress Bars */
+.progress-kahoot {
+  background: var(--kahoot-gray-200);
+  border-radius: var(--radius-kahoot-full);
+  height: 0.75rem;
+  overflow: hidden;
+}
+
+.progress-kahoot-fill {
+  background: var(--gradient-kahoot-primary);
+  height: 100%;
+  border-radius: var(--radius-kahoot-full);
+  transition: width var(--transition-kahoot-slow);
+}
+
+/* Interactive Elements */
+.interactive-kahoot {
+  cursor: pointer;
+  transition: all var(--transition-kahoot-normal);
+  user-select: none;
+}
+
+.interactive-kahoot:hover {
+  transform: scale(1.02);
+}
+
+.interactive-kahoot:active {
+  transform: scale(0.98);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .btn-kahoot-primary,
+  .btn-kahoot-secondary,
+  .btn-kahoot-success,
+  .btn-kahoot-danger {
+    padding: var(--spacing-kahoot-md) var(--spacing-kahoot-xl);
+    font-size: 1rem;
+  }
+  
+  .text-kahoot-heading {
+    font-size: 1.875rem;
+  }
+  
+  .card-kahoot {
+    padding: var(--spacing-kahoot-xl);
+  }
+}
