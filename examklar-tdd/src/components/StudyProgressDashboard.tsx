@@ -51,6 +51,7 @@ const StudyProgressDashboard = () => {
             value="0 hours"
             bgColor="bg-blue-50"
             textColor="text-blue-600"
+            data-testid="total-study-time"
           />
           <ProgressMetricCard
             title="Sessions Completed"
@@ -72,7 +73,7 @@ const StudyProgressDashboard = () => {
           />
         </div>
         
-        <div className="mb-8">
+        <div className="mb-8" data-testid="weekly-progress">
           <h3 className="text-lg font-semibold mb-4">Weekly Goal</h3>
           <ProgressBar
             percentage={0}
@@ -84,7 +85,7 @@ const StudyProgressDashboard = () => {
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div>
+          <div data-testid="upcoming-exams">
             <h3 className="text-lg font-semibold mb-4">Upcoming Exams</h3>
             <div className="bg-gray-50 rounded-lg p-4">
               <p className="text-gray-600">No upcoming exams</p>
@@ -101,7 +102,7 @@ const StudyProgressDashboard = () => {
           </div>
         </div>
         
-        <div className="mt-8">
+        <div className="mt-8" data-testid="progress-charts">
           <h3 className="text-lg font-semibold mb-4">Progress Trends</h3>
           <ProgressCharts data={{
             weeklyStudyHours: [],
@@ -157,6 +158,7 @@ const StudyProgressDashboard = () => {
           value={totalHours}
           bgColor="bg-blue-50"
           textColor="text-blue-600"
+          data-testid="total-study-time"
         />
         <ProgressMetricCard
           title="Sessions Completed"
@@ -180,7 +182,7 @@ const StudyProgressDashboard = () => {
       </div>
       
       {/* Weekly Goal Progress */}
-      <div className="mb-8">
+      <div className="mb-8" data-testid="weekly-progress">
         <h3 className="text-lg font-semibold mb-4">Weekly Goal</h3>
         <ProgressBar
           percentage={weeklyProgressPercent}
@@ -194,7 +196,7 @@ const StudyProgressDashboard = () => {
       {/* Two Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Upcoming Exams */}
-        <div>
+        <div data-testid="upcoming-exams">
           <h3 className="text-lg font-semibold mb-4">Upcoming Exams</h3>
           <div className="space-y-3">
             {upcomingExams.length > 0 ? (
@@ -236,7 +238,7 @@ const StudyProgressDashboard = () => {
       </div>
       
       {/* Progress Charts */}
-      <div>
+      <div data-testid="progress-charts">
         <h3 className="text-lg font-semibold mb-4">Progress Trends</h3>
         <ProgressCharts data={chartData} />
       </div>

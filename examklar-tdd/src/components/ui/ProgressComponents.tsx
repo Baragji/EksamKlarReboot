@@ -4,6 +4,7 @@ interface ProgressMetricCardProps {
   bgColor: string
   textColor: string
   subtitle?: string
+  'data-testid'?: string
 }
 
 /**
@@ -14,9 +15,10 @@ const ProgressMetricCard = ({
   value, 
   bgColor, 
   textColor, 
-  subtitle 
+  subtitle,
+  'data-testid': dataTestId 
 }: ProgressMetricCardProps) => (
-  <div className={`${bgColor} rounded-lg p-4`}>
+  <div className={`${bgColor} rounded-lg p-4`} data-testid={dataTestId}>
     <h3 className={`text-sm font-medium ${textColor} mb-2`}>
       {title}
     </h3>
