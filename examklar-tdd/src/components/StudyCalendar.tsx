@@ -1,17 +1,6 @@
 import { useState, memo } from 'react';
 import { useExamStore } from '../stores/examStore';
-
-interface StudySession {
-  id: string;
-  subjectId: string;
-  subjectName: string;
-  date: string;
-  duration: number;
-  topicsStudied?: string[];
-  topicsPlanned?: string[];
-  completed: boolean;
-  type?: 'scheduled';
-}
+import type { StudySession } from '../stores/examStore';
 
 interface AddSessionFormData {
   subjectName: string;
@@ -21,7 +10,7 @@ interface AddSessionFormData {
 }
 
 export const StudyCalendar = memo(() => {
-  const { studySessions, scheduledSessions, addScheduledSession, updateSession, deleteSession } = useExamStore();
+  const { studySessions, scheduledSessions, subjects, addScheduledSession, updateSession, deleteSession } = useExamStore();
   
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<'month' | 'week'>('month');
@@ -75,8 +64,12 @@ export const StudyCalendar = memo(() => {
   };
 
   const handleAddSession = (formData: AddSessionFormData) => {
+    // Use the first subject if available, or create a default one
+    const defaultSubjectId = subjects.length > 0 ? subjects[0].id : 'default-subject'
+    
     addScheduledSession({
       ...formData,
+      subjectId: defaultSubjectId,
       date: selectedDate
     });
     setShowAddModal(false);
@@ -253,7 +246,13 @@ export const StudyCalendar = memo(() => {
             <EditSessionForm
               session={selectedSession}
               onSave={(updatedSession) => {
-                updateSession(updatedSession);
+                // Ensure all required fields are present
+                const completeSession: StudySession = {
+                  ...selectedSession,
+                  ...updatedSession,
+                  createdAt: selectedSession.createdAt || new Date()
+                }
+                updateSession(completeSession);
                 setShowEditModal(false);
                 setSelectedSession(null);
               }}

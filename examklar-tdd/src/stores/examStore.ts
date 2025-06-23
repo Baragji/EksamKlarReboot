@@ -5,7 +5,7 @@ import type { User, Subject, StudyPlan, Progress } from '../types'
 /**
  * Study Session types
  */
-interface StudySession {
+export interface StudySession {
   id: string
   subjectId: string
   subjectName: string
