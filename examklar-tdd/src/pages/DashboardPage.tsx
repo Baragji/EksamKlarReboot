@@ -1,6 +1,10 @@
 import StudyProgressDashboard from '../components/StudyProgressDashboard'
+import { SubjectCard } from '../components/SubjectCard'
+import { useExamStore } from '../stores/examStore'
 
 const DashboardPage = () => {
+  const { subjects } = useExamStore()
+  
   return (
     <div className="py-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-6">
@@ -9,6 +13,22 @@ const DashboardPage = () => {
       
       {/* Study Progress Analytics Dashboard */}
       <StudyProgressDashboard />
+      
+      {/* Subject Cards */}
+      {subjects.length > 0 && (
+        <div className="mt-8">
+          <h2 className="text-xl font-semibold mb-4">Your Subjects</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {subjects.map((subject) => (
+              <SubjectCard
+                key={subject.id}
+                subject={subject}
+                progress={0}
+              />
+            ))}
+          </div>
+        </div>
+      )}
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
         <div className="bg-white rounded-lg shadow p-6">

@@ -30,14 +30,13 @@ test.describe('ExamKlar E2E - Critical User Journeys', () => {
     await page.fill('input[name="estimated-hours"]', '40')
     await page.click('button:has-text("Next")')
     
-    // Step 3: Study preferences
-    await expect(page.locator('h2')).toContainText('Study Preferences')
-    await page.click('button[data-testid="study-time-morning"]')
-    await page.click('button:has-text("Continue")')
+    // Step 3: Completion
+    await expect(page.getByRole('heading', { name: "You're All Set!" })).toBeVisible()
+    await page.click('button:has-text("Go to Dashboard")')
     
     // Should complete onboarding and redirect to dashboard
     await expect(page).toHaveURL('/dashboard')
-    await expect(page.locator('h1')).toContainText('Dashboard')
+    await expect(page.getByRole('heading', { name: 'Dashboard', exact: true })).toBeVisible()
     
     // Should show the added subject
     await expect(page.locator('[data-testid="subject-card"]')).toContainText('Mathematics')

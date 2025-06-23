@@ -79,6 +79,7 @@ export const SubjectCard: React.FC<SubjectCardProps> = ({
 
   return (
     <button
+      data-testid="subject-card"
       className={`w-full p-6 rounded-lg border-2 text-left transition-all hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${urgencyStyle} ${className}`}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
