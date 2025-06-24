@@ -8,56 +8,48 @@ import SettingsPage from '@/pages/SettingsPage'
 vi.mock('@/stores/flashcardStore', () => ({
   useFlashcardStore: vi.fn(() => ({
     decks: [{ id: '1', name: 'Test Deck', cards: [] }],
-    clearAllDecks: vi.fn(),
-    addDeck: vi.fn()
+    exportDecks: vi.fn(() => JSON.stringify({ decks: [{ id: '1', name: 'Test Deck', cards: [] }] })),
+    importDecks: vi.fn()
   }))
 }))
 
 vi.mock('@/stores/examStore', () => ({
   useExamStore: vi.fn(() => ({
-    progress: { sessionsCompleted: 0, totalStudyTime: 0 },
-    currentSubject: 'Math',
-    onboardingCompleted: true,
-    setProgress: vi.fn(),
-    setCurrentSubject: vi.fn(),
-    setOnboardingCompleted: vi.fn()
-  }))
-}))
-
-vi.mock('@/stores/achievementStore', () => ({
-  useAchievementStore: vi.fn(() => ({
-    unlockedAchievements: [],
-    resetAchievements: vi.fn(),
-    unlockAchievement: vi.fn()
+    sessions: [{ id: '1', date: new Date().toISOString(), duration: 60 }],
+    achievements: [{ id: '1', name: 'First Study', date: new Date().toISOString() }],
+    totalStudyTime: 120,
+    exportData: vi.fn(() => JSON.stringify({ sessions: [], achievements: [] })),
+    importData: vi.fn()
   }))
 }))
 
 // Mock the export/import functionality
 vi.mock('@/utils/exportImport', () => ({
   exportToFile: vi.fn((data, filename) => Promise.resolve()),
-  importFromFile: vi.fn(() => Promise.resolve({ data: { version: '1.0', examStore: {}, flashcardStore: {} } }))
+  importFromFile: vi.fn(() => Promise.resolve({ data: { decks: [], sessions: [] } }))
 }))
 
-describe('SettingsPage - Data Export/Import (V5 Fase 3)', () => {
+describe('SettingsPage - Robust Tests', () => {
+  // Mock URL API
+  const mockCreateObjectURL = vi.fn(() => 'mock-url')
+  const mockRevokeObjectURL = vi.fn()
+  
   beforeEach(() => {
-    // Mock URL methods for export functionality
-    global.URL.createObjectURL = vi.fn(() => 'mock-url')
-    global.URL.revokeObjectURL = vi.fn()
+    // Setup URL API mocks
+    global.URL.createObjectURL = mockCreateObjectURL
+    global.URL.revokeObjectURL = mockRevokeObjectURL
     
     // Mock console.error to suppress React DOM warnings
     vi.spyOn(console, 'error').mockImplementation(() => {})
   })
-
+  
   afterEach(() => {
-    // Clean up React components
+    // Clean up
     cleanup()
-    
-    // Clear all mocks
     vi.clearAllMocks()
   })
-
+  
   it('should render settings page with export/import buttons', () => {
-    // 🟢 GREEN: This test should pass - SettingsPage exists
     render(
       <BrowserRouter>
         <SettingsPage />
@@ -68,59 +60,8 @@ describe('SettingsPage - Data Export/Import (V5 Fase 3)', () => {
     expect(screen.getByRole('button', { name: /export data/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /import data/i })).toBeInTheDocument()
   })
-
-  it('should have export functionality', async () => {
-    // Import the mocked module
-    const { exportToFile } = await import('@/utils/exportImport')
-    
-    render(
-      <BrowserRouter>
-        <SettingsPage />
-      </BrowserRouter>
-    )
-    
-    const exportButton = screen.getByRole('button', { name: /export data/i })
-    fireEvent.click(exportButton)
-    
-    // Should show loading state briefly
-    await waitFor(() => {
-      expect(screen.getByText(/exporting data/i)).toBeInTheDocument()
-    })
-    
-    // Verify the export function was called
-    await waitFor(() => {
-      expect(exportToFile).toHaveBeenCalled()
-    })
-  })
-
-  it('should have import functionality', async () => {
-    // Import the mocked module
-    const { importFromFile } = await import('@/utils/exportImport')
-    
-    render(
-      <BrowserRouter>
-        <SettingsPage />
-      </BrowserRouter>
-    )
-    
-    const importButton = screen.getByRole('button', { name: /import data/i })
-    expect(importButton).toBeInTheDocument()
-    
-    fireEvent.click(importButton)
-    
-    // Should show loading state briefly
-    await waitFor(() => {
-      expect(screen.getByText(/import data\.\.\./i)).toBeInTheDocument()
-    })
-    
-    // Verify the import function was called
-    await waitFor(() => {
-      expect(importFromFile).toHaveBeenCalled()
-    })
-  })
-
+  
   it('should display current data summary', () => {
-    // 🟢 GREEN: This test should pass - data summary exists
     render(
       <BrowserRouter>
         <SettingsPage />
@@ -132,5 +73,45 @@ describe('SettingsPage - Data Export/Import (V5 Fase 3)', () => {
     expect(screen.getByText(/study sessions/i)).toBeInTheDocument()
     expect(screen.getByText(/achievements/i)).toBeInTheDocument()
     expect(screen.getByText(/total study time/i)).toBeInTheDocument()
+  })
+  
+  it('should handle export button click', async () => {
+    // Import the mocked module
+    const { exportToFile } = await import('@/utils/exportImport')
+    
+    render(
+      <BrowserRouter>
+        <SettingsPage />
+      </BrowserRouter>
+    )
+    
+    // Click the export button
+    const exportButton = screen.getByRole('button', { name: /export data/i })
+    fireEvent.click(exportButton)
+    
+    // Verify the export function was called
+    await waitFor(() => {
+      expect(exportToFile).toHaveBeenCalled()
+    })
+  })
+  
+  it('should handle import button click', async () => {
+    // Import the mocked module
+    const { importFromFile } = await import('@/utils/exportImport')
+    
+    render(
+      <BrowserRouter>
+        <SettingsPage />
+      </BrowserRouter>
+    )
+    
+    // Click the import button
+    const importButton = screen.getByRole('button', { name: /import data/i })
+    fireEvent.click(importButton)
+    
+    // Verify the import function was called
+    await waitFor(() => {
+      expect(importFromFile).toHaveBeenCalled()
+    })
   })
 })

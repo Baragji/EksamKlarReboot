@@ -215,6 +215,7 @@ class ExamKlarRoadmapTDD:
         current = self.status["current_phase"]
         
         valid_transitions = {
+            "INIT": ["RED"],
             "RED": ["GREEN"],
             "GREEN": ["REFACTOR", "RED"],
             "REFACTOR": ["RED"]

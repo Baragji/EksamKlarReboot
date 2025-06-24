@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useExamStore } from '@/stores/examStore'
 import { useFlashcardStore } from '@/stores/flashcardStore'
 import { useAchievementStore } from '@/stores/achievementStore'
+import { exportToFile, importFromFile } from '@/utils/exportImport'
 import type { FlashcardDeck } from '@/types'
 
 interface DataSummary {
@@ -49,19 +50,9 @@ const SettingsPage: React.FC = () => {
         }
       }
 
-      // Create downloadable JSON file
-      const blob = new Blob([JSON.stringify(exportData, null, 2)], {
-        type: 'application/json'
-      })
-      
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = `examklar-backup-${new Date().toISOString().split('T')[0]}.json`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      URL.revokeObjectURL(url)
+      // Use the exportToFile utility function
+      const filename = `examklar-backup-${new Date().toISOString().split('T')[0]}.json`
+      await exportToFile(exportData, filename)
 
     } catch (error) {
       console.error('Export failed:', error)
@@ -70,68 +61,63 @@ const SettingsPage: React.FC = () => {
     }
   }
 
-  const handleImportData = () => {
+  const handleImportData = async () => {
     setIsImporting(true)
     
-    // Create file input element
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.accept = '.json'
-    
-    input.onchange = async (event) => {
-      const file = (event.target as HTMLInputElement).files?.[0]
-      if (!file) {
-        setIsImporting(false)
-        return
+    try {
+      // Use the importFromFile utility function
+      const { data } = await importFromFile()
+      const importData = data as Record<string, unknown>
+      
+      // Validate data structure
+      if (!importData.version || !importData.examStore || !importData.flashcardStore) {
+        throw new Error('Invalid backup file format')
       }
 
-      try {
-        const text = await file.text()
-        const importData = JSON.parse(text)
-        
-        // Validate data structure
-        if (!importData.version || !importData.examStore || !importData.flashcardStore) {
-          throw new Error('Invalid backup file format')
+      // Import data to stores
+      if (importData.examStore) {
+        const examData = importData.examStore as Record<string, unknown>
+        if (examData.progress) {
+          examStore.setProgress(examData.progress as Record<string, unknown>)
         }
-
-        // Import data to stores
-        if (importData.examStore) {
-          examStore.setProgress(importData.examStore.progress)
-          if (importData.examStore.currentSubject) {
-            examStore.setCurrentSubject(importData.examStore.currentSubject)
-          }
-          if (importData.examStore.onboardingCompleted) {
-            examStore.setOnboardingCompleted(true)
-          }
+        if (examData.currentSubject) {
+          examStore.setCurrentSubject(examData.currentSubject as string)
         }
+        if (examData.onboardingCompleted) {
+          examStore.setOnboardingCompleted(true)
+        }
+      }
 
-        if (importData.flashcardStore?.decks) {
+      if (importData.flashcardStore) {
+        const flashcardData = importData.flashcardStore as Record<string, unknown>
+        if (Array.isArray(flashcardData.decks)) {
           // Clear existing decks and import new ones
           flashcardStore.clearAllDecks()
-          importData.flashcardStore.decks.forEach((deck: FlashcardDeck) => {
+          flashcardData.decks.forEach((deck: FlashcardDeck) => {
             flashcardStore.addDeck(deck)
           })
         }
+      }
 
-        if (importData.achievementStore?.unlockedAchievements) {
+      if (importData.achievementStore) {
+        const achievementData = importData.achievementStore as Record<string, unknown>
+        if (Array.isArray(achievementData.unlockedAchievements)) {
           // Clear and restore achievements
           achievementStore.resetAchievements()
-          importData.achievementStore.unlockedAchievements.forEach((achievementId: string) => {
+          achievementData.unlockedAchievements.forEach((achievementId: string) => {
             achievementStore.unlockAchievement(achievementId)
           })
         }
-
-        alert('Data imported successfully!')
-        
-      } catch (error) {
-        console.error('Import failed:', error)
-        alert('Failed to import data. Please check the file format.')
-      } finally {
-        setIsImporting(false)
       }
+
+      alert('Data imported successfully!')
+      
+    } catch (error) {
+      console.error('Import failed:', error)
+      alert('Failed to import data. Please check the file format.')
+    } finally {
+      setIsImporting(false)
     }
-    
-    input.click()
   }
 
   return (

@@ -14,7 +14,7 @@ Reference: Wow-Faktor Analysen giver en komplet liste over, hvad der mangler.
 Denne plan følger vores etablerede TDD-metodologi. Hver ny funktion skal implementeres via Red-Green-Refactor cyklussen, og konteksten skal opdateres efter hver handling.
 
 # Efter HVER handling (teste, skrive kode, refaktorere):
-python3 Contextsystem/update_context.py "Kort, præcis beskrivelse af handlingen"
+python3 tdd.py "Kort, præcis beskrivelse af handlingen"
 
 🚀 Implementeringsplan: Fra Fundament til Fuldendt App
 Her er faserne, der vil tage os fra vores nuværende tilstand til den færdige vision.
@@ -33,7 +33,7 @@ Dag 1-2: Streak Counter
 
 🟢 GREEN: Implementer UI i StudyProgressDashboard til at vise den nuværende streak med en motiverende besked (f.eks. "🔥 5 dage i træk!").
 
-📝 UPDATE CONTEXT: python3 Contextsystem/update_context.py "Implemented Streak Counter logic and UI"
+📝 UPDATE CONTEXT: python3 tdd.py "Implemented Streak Counter logic and UI"
 
 Dag 3-5: Achievement System
 
@@ -45,7 +45,7 @@ Dag 3-5: Achievement System
 
 🟢 GREEN: Implementer "listeners" eller afledt logik, der tildeler achievements baseret på brugerens fremskridt.
 
-📝 UPDATE CONTEXT: python3 Contextsystem/update_context.py "Implemented Achievement System backend logic"
+📝 UPDATE CONTEXT: python3 tdd.py "Implemented Achievement System backend logic"
 
 Dag 6-7: UI for Achievements
 
@@ -53,7 +53,7 @@ Dag 6-7: UI for Achievements
 
 🟢 GREEN: Implementer komponenten, der viser achievements med ikoner og beskrivelser.
 
-📝 UPDATE CONTEXT: python3 Contextsystem/update_context.py "Created UI for Achievement System"
+📝 UPDATE CONTEXT: python3 tdd.py "Created UI for Achievement System"
 
 Fase 2: Intelligent Onboarding & PWA (Uge 2)
 
@@ -69,7 +69,7 @@ Dag 1-3: DataBridge - Automatisk Indholdsgenerering
 
 🟢 GREEN: Implementer UI for "AI tænker"-sekvensen i OnboardingPage.tsx for at give en mere engagerende oplevelse.
 
-📝 UPDATE CONTEXT: python3 Contextsystem/update_context.py "Implemented DataBridge for intelligent onboarding"
+📝 UPDATE CONTEXT: python3 tdd.py "Implemented DataBridge for intelligent onboarding"
 
 Dag 4-7: PWA & Mobiloplevelse
 
@@ -81,7 +81,7 @@ Dag 4-7: PWA & Mobiloplevelse
 
 🟢 GREEN: Implementer swipe-navigation mellem hovedsiderne ved hjælp af f.eks. Framer Motion. Implementer kald til navigator.vibrate() på vigtige handlinger (som at gennemføre en quiz).
 
-📝 UPDATE CONTEXT: python3 Contextsystem/update_context.py "PWA and mobile gesture features implemented"
+📝 UPDATE CONTEXT: python3 tdd.py "PWA and mobile gesture features implemented"
 
 Fase 3: Avancerede Værktøjer (Uge 3)
 
@@ -97,7 +97,7 @@ Dag 1-3: Data Eksport/Import
 
 🟢 GREEN: Implementer exportState() og importState() i examStore. Forbind dem til UI-knapperne.
 
-📝 UPDATE CONTEXT: python3 Contextsystem/update_context.py "Implemented Data Export/Import functionality"
+📝 UPDATE CONTEXT: python3 tdd.py "Implemented Data Export/Import functionality"
 
 Dag 4-7: Global Søgning & Dark Mode
 
@@ -109,7 +109,7 @@ Dag 4-7: Global Søgning & Dark Mode
 
 🟢 GREEN: Implementer en themeStore.ts (eller lignende) og opdater Layout.tsx og CSS'en til at understøtte dynamisk skift mellem lys og mørk tilstand.
 
-📝 UPDATE CONTEXT: python3 Contextsystem/update_context.py "Global Search and Dark Mode implemented"
+📝 UPDATE CONTEXT: python3 tdd.py "Global Search and Dark Mode implemented"
 
 Fase 4: AI Assistent (Uge 4)
 
@@ -127,4 +127,4 @@ Mål: At genimplementere den fulde AI-assistent.
 
 🟢 GREEN: Implementer fallback-logikken, der giver foruddefinerede svar, hvis API-kald fejler.
 
-📝 UPDATE CONTEXT: python3 Contextsystem/update_context.py "AI Assistant feature fully implemented"
+📝 UPDATE CONTEXT: python3 tdd.py "AI Assistant feature fully implemented"
