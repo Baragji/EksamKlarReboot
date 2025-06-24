@@ -1,6 +1,11 @@
 /**
  * Core type definitions for ExamKlar application
+ * Enhanced with comprehensive onboarding and databridge types
  */
+
+// Re-export all onboarding and databridge types
+export * from './onboarding'
+export * from './databridge'
 
 export interface User {
   id: string

@@ -1,6 +1,8 @@
 {
-  "completed_sessions": [],
+  "completed_sessions": [
+    "1.1"
+  ],
   "current_phase": "FASE 1: FOUNDATION",
   "total_sessions": 25,
-  "last_updated": "2025-06-24T12:57:49.293359+00:00"
+  "last_updated": "2025-06-24T13:06:18.994484+00:00"
 }
