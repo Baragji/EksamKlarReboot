@@ -372,7 +372,10 @@ export const useFlashcardStore = create<FlashcardStore>()(
             totalReviews,
             masteryLevel,
             lastStudied: deck.cards.reduce((latest, card) => {
-              if (!latest || (card.lastReviewed && card.lastReviewed > latest)) {
+              if (!latest && card.lastReviewed) {
+                return card.lastReviewed
+              }
+              if (latest && card.lastReviewed && card.lastReviewed > latest) {
                 return card.lastReviewed
               }
               return latest

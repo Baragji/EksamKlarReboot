@@ -25,7 +25,7 @@ const OnboardingPage = () => {
   const [generationProgress, setGenerationProgress] = useState<GenerationProgress | null>(null)
   const [generationError, setGenerationError] = useState<string | null>(null)
   
-  const { addSubject, completeOnboarding, storeGeneratedContent, getGeneratedContent } = useExamStore()
+  const { addSubject, completeOnboarding, handleOnboardingComplete, trainingData } = useExamStore()
   const { createDeck } = useFlashcardStore()
   const navigate = useNavigate()
 
@@ -40,24 +40,49 @@ const OnboardingPage = () => {
       })
 
       // Generate content
-      const generatedContent = await dataBridge.generateContent({
+      await dataBridge.generateContent({
         subjectName: subject.name,
         examDate: subject.examDate,
         estimatedHours: subject.estimatedHours
       })
 
-      // Store generated content
-      storeGeneratedContent(generatedContent)
+      // Use new store integration - convert to onboarding data
+      const onboardingDataForCompletion = {
+        subject: subject.name,
+        subjectEmoji: subject.emoji,
+        content: [], // Will be filled by training data generation
+        examDate: subject.examDate.toISOString(),
+        daysToExam: Math.ceil((subject.examDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24)),
+        learningPlan: null,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
 
-      // Create flashcard decks in the flashcard store
-      generatedContent.flashcardDecks.forEach(deck => {
-        createDeck({
-          subjectId: deck.subjectId,
-          name: deck.name,
-          description: deck.description,
-          cards: deck.cards
+      await handleOnboardingComplete(onboardingDataForCompletion)
+
+      // Create flashcard decks from training data
+      if (trainingData?.flashcards) {
+        trainingData.flashcards.forEach(flashcard => {
+          createDeck({
+            subjectId: subject.id,
+            name: `${subject.name} Flashcards`,
+            description: `Generated flashcards for ${subject.name}`,
+            cards: [{
+              id: flashcard.id,
+              front: flashcard.front,
+              back: flashcard.back,
+              difficulty: 'medium' as const,
+              tags: [],
+              lastReviewed: null,
+              nextReview: new Date(Date.now() + 24 * 60 * 60 * 1000),
+              correctStreak: 0,
+              totalReviews: 0,
+              subjectId: subject.id,
+              createdAt: new Date()
+            }]
+          })
         })
-      })
+      }
 
       unsubscribe()
       setIsGenerating(false)
@@ -68,13 +93,14 @@ const OnboardingPage = () => {
       
       try {
         // Generate fallback content
-        const fallbackContent = await dataBridge.generateFallbackContent({
+        await dataBridge.generateFallbackContent({
           subjectName: subject.name,
           examDate: subject.examDate,
           estimatedHours: subject.estimatedHours
         })
         
-        storeGeneratedContent(fallbackContent)
+        // Use fallback through DataBridge store fallback system
+        // This will be handled automatically by the store integration
         setIsGenerating(false)
         setCurrentStep(4) // Always proceed to completion with fallback content
       } catch {
@@ -82,7 +108,7 @@ const OnboardingPage = () => {
         setIsGenerating(false)
       }
     }
-  }, [storeGeneratedContent, createDeck])
+  }, [handleOnboardingComplete, createDeck, trainingData])
 
   // Start content generation when entering step 3
   useEffect(() => {
@@ -596,17 +622,17 @@ const OnboardingPage = () => {
               >
                 <h3 className="font-semibold text-gray-800 mb-3">📚 Everything is ready for your study journey!</h3>
                 
-                {getGeneratedContent() && (
+                {trainingData && (
                   <div className="space-y-2 text-sm text-gray-600">
                     <div data-testid="flashcards-count">
-                      📃 <strong>{getGeneratedContent()?.flashcardDecks?.length || 5}</strong> flashcard decks with{' '}
-                      {getGeneratedContent()?.flashcardDecks?.reduce((total: number, deck) => total + (deck.cards?.length || 0), 0) || 15} cards
+                      📃 <strong>{trainingData?.flashcards?.length || 5}</strong> flashcard decks with{' '}
+                      {trainingData?.flashcards?.reduce((total: number, deck: unknown) => total + ((deck as { cards?: unknown[] })?.cards?.length || 0), 0) || 15} cards
                     </div>
                     <div data-testid="quizzes-count">
-                      🧠 <strong>{getGeneratedContent()?.quizzes?.length || 3}</strong> practice quizzes
+                      🧠 <strong>{trainingData?.quizzes?.length || 3}</strong> practice quizzes
                     </div>
                     <div data-testid="schedule-duration">
-                      📅 <strong>{getGeneratedContent()?.studySchedule?.length || 10}</strong> scheduled study sessions
+                      📅 <strong>{trainingData?.studyMaterials?.length || 10}</strong> study materials
                     </div>
                     <div>
                       🎯 Complete study plan with milestones
@@ -614,7 +640,7 @@ const OnboardingPage = () => {
                   </div>
                 )}
                 
-                {!getGeneratedContent() && (
+                {!trainingData && (
                   <div className="space-y-2 text-sm text-gray-600">
                     <div data-testid="flashcards-count">
                       📃 <strong>5</strong> flashcard decks with 15 cards

@@ -10,19 +10,12 @@ import type {
   OnboardingData,
   ContentItem,
   SubjectOption,
-  TimelineOption,
-  LearningPlan,
   OnboardingState,
   ToastNotification,
-  OnboardingAnalytics,
   
   // DataBridge Types
   DataBridgeConfig,
   ProcessedContent,
-  SubjectIntelligence,
-  ContentTemplate,
-  LearningPathway,
-  TrainingData,
   
   // Core Types
   User,

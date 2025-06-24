@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """
-EXAMKLAR ATOMIC TDD CONTEXT SYSTEM V6 - PHASED ROADMAP ALIGNED
-Komplet session tracking for 42 atomiske micro sessions across 5 faser
-Usage: python3 atomic_tdd.py "session_id" "action_description"
-Example: python3 atomic_tdd.py "1.1" "Implemented OnboardingData interface"
+EXAMKLAR TDD CONTEXT SYSTEM V6 - RED-GREEN-REFACTOR ENHANCED
+🧪 MANDATORY TDD WORKFLOW: Write tests first, then implement!
+🔴 RED: Write failing test → 🟢 GREEN: Make it pass → 🔵 REFACTOR: Improve code
+
+Usage: python3 newtdd.py "session_id" "action_description"
+Example: python3 newtdd.py "1.1" "🔴 RED: Created failing test for OnboardingData interface"
 """
 
 import os
@@ -393,10 +395,13 @@ def initialize_tdd_system():
         CURRENT_STATUS_FILE.write_text(json.dumps(initial_status, indent=2))
 
 def log_session(session_id, action_description):
-    """Log a completed session"""
+    """Log a completed session with TDD workflow tracking"""
     if session_id not in ROADMAP_SESSIONS:
         print(f"❌ Unknown session: {session_id}")
         return False
+    
+    # Detect TDD phase from action description
+    tdd_phase = detect_tdd_phase(action_description)
     
     # Load existing log
     log_data = json.loads(SESSION_LOG_FILE.read_text())
@@ -409,7 +414,9 @@ def log_session(session_id, action_description):
         "action": action_description,
         "timestamp": get_timestamp(),
         "duration": ROADMAP_SESSIONS[session_id]["duration"],
-        "deliverables": ROADMAP_SESSIONS[session_id]["deliverables"]
+        "deliverables": ROADMAP_SESSIONS[session_id]["deliverables"],
+        "tdd_phase": tdd_phase,
+        "tdd_cycle": get_current_tdd_cycle(session_id, log_data)
     }
     
     log_data.append(session_entry)
@@ -418,8 +425,78 @@ def log_session(session_id, action_description):
     # Update status
     update_status(session_id)
     
+    # Show TDD workflow guidance
+    show_tdd_guidance(tdd_phase, session_id)
+    
     print(f"✅ Session {session_id} logged: {action_description}")
     return True
+
+def detect_tdd_phase(action_description):
+    """Detect TDD phase from action description"""
+    action_lower = action_description.lower()
+    
+    if any(keyword in action_lower for keyword in ['🔴', 'red', 'failing test', 'test fail', 'write test', 'created test']):
+        return "RED"
+    elif any(keyword in action_lower for keyword in ['🟢', 'green', 'make pass', 'implement', 'test pass', 'completed', 'working']):
+        return "GREEN"  
+    elif any(keyword in action_lower for keyword in ['🔵', 'refactor', 'improve', 'clean up', 'optimize', 'polish']):
+        return "REFACTOR"
+    else:
+        return "UNKNOWN"
+
+def get_current_tdd_cycle(session_id, log_data):
+    """Get current TDD cycle number for session"""
+    session_entries = [entry for entry in log_data if entry.get("session_id") == session_id]
+    
+    # Count completed RED-GREEN-REFACTOR cycles
+    cycles = 0
+    current_cycle_phases = []
+    
+    for entry in session_entries:
+        phase = entry.get("tdd_phase", "UNKNOWN")
+        if phase == "RED":
+            # Start new cycle
+            cycles += 1
+            current_cycle_phases = ["RED"]
+        elif phase in ["GREEN", "REFACTOR"] and current_cycle_phases:
+            current_cycle_phases.append(phase)
+    
+    return cycles
+
+def show_tdd_guidance(current_phase, session_id):
+    """Show TDD workflow guidance based on current phase"""
+    guidance = {
+        "RED": {
+            "emoji": "🔴",
+            "message": "RED PHASE: Write a failing test first!",
+            "next": "🟢 Next: Write minimal code to make the test pass",
+            "example": f'python3 newtdd.py "{session_id}" "🟢 GREEN: Implemented feature - tests now pass"'
+        },
+        "GREEN": {
+            "emoji": "🟢", 
+            "message": "GREEN PHASE: Make the test pass!",
+            "next": "🔵 Next: Refactor to improve code quality",
+            "example": f'python3 newtdd.py "{session_id}" "🔵 REFACTOR: Improved code structure and readability"'
+        },
+        "REFACTOR": {
+            "emoji": "🔵",
+            "message": "REFACTOR PHASE: Improve code quality!",
+            "next": "🔴 Next: Write next failing test for new functionality",
+            "example": f'python3 newtdd.py "{session_id}" "🔴 RED: Created failing test for next feature"'
+        },
+        "UNKNOWN": {
+            "emoji": "⚠️",
+            "message": "TDD PHASE UNCLEAR: Please specify RED/GREEN/REFACTOR",
+            "next": "🔴 Recommended: Start with writing a failing test",
+            "example": f'python3 newtdd.py "{session_id}" "🔴 RED: Created failing test for [feature]"'
+        }
+    }
+    
+    phase_info = guidance.get(current_phase, guidance["UNKNOWN"])
+    print(f"\n{phase_info['emoji']} TDD WORKFLOW: {phase_info['message']}")
+    print(f"📋 {phase_info['next']}")
+    print(f"💡 Example: {phase_info['example']}")
+    print(f"🧪 Remember: RED → GREEN → REFACTOR → REPEAT")
 
 def update_status(completed_session_id):
     """Update current status after session completion"""

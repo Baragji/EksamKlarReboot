@@ -78,10 +78,25 @@ const SettingsPage: React.FC = () => {
       if (importData.examStore) {
         const examData = importData.examStore as Record<string, unknown>
         if (examData.progress) {
-          examStore.setProgress(examData.progress as Record<string, unknown>)
+          const progressData = examData.progress as Record<string, unknown>
+          // Validate and convert progress data
+          const validProgress = {
+            sessionsCompleted: typeof progressData.sessionsCompleted === 'number' ? progressData.sessionsCompleted : 0,
+            totalStudyTime: typeof progressData.totalStudyTime === 'number' ? progressData.totalStudyTime : 0,
+            streakCount: typeof progressData.streakCount === 'number' ? progressData.streakCount : 0,
+            lastActivity: typeof progressData.lastActivity === 'string' ? new Date(progressData.lastActivity) : new Date(),
+            weeklyGoal: typeof progressData.weeklyGoal === 'number' ? progressData.weeklyGoal : 0,
+            weeklyProgress: typeof progressData.weeklyProgress === 'number' ? progressData.weeklyProgress : 0
+          }
+          examStore.setProgress(validProgress)
         }
         if (examData.currentSubject) {
-          examStore.setCurrentSubject(examData.currentSubject as string)
+          const subjectName = examData.currentSubject as string
+          // Find the subject object from the subjects list
+          const subject = examStore.subjects.find(s => s.name === subjectName)
+          if (subject) {
+            examStore.setCurrentSubject(subject)
+          }
         }
         if (examData.onboardingCompleted) {
           examStore.setOnboardingCompleted(true)

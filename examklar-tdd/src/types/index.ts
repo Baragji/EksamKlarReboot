@@ -77,7 +77,7 @@ export interface Flashcard {
   back: string
   difficulty: 'easy' | 'medium' | 'hard'
   tags: string[]
-  lastReviewed: Date
+  lastReviewed: Date | null
   nextReview: Date
   correctStreak: number
   totalReviews: number

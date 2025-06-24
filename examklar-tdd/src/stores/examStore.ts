@@ -1,8 +1,16 @@
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
-import type { User, Subject, StudyPlan, Progress } from '@/types'
+import type { 
+  User, 
+  Subject, 
+  StudyPlan, 
+  Progress,
+  OnboardingData,
+  TrainingData
+} from '@/types'
 import { useAchievementStore, type ProgressData } from './achievementStore'
-import type { GeneratedContent } from '@/utils/dataBridge'
+import { useOnboardingStore } from './onboardingStore'
+import { useDataBridgeStore } from './databridgeStore'
 
 /**
  * Study Session types
@@ -55,8 +63,13 @@ interface ExamStore {
   flashcardsReviewed: number
   recentAchievements: string[]
   
-  // DataBridge Content Generation (V5 Onboarding)
-  generatedContent: GeneratedContent | null
+  // Enhanced Integration State
+  onboardingData: OnboardingData | null
+  trainingData: TrainingData | null
+  
+  // Store Integration Status
+  storesInitialized: boolean
+  lastSyncTimestamp: Date | null
   
   // Actions
   setUser: (user: User) => void
@@ -86,10 +99,17 @@ interface ExamStore {
   clearRecentAchievements: () => void
   resetStore: () => void
   
-  // DataBridge Actions
-  storeGeneratedContent: (content: GeneratedContent) => void
-  clearGeneratedContent: () => void
-  getGeneratedContent: () => GeneratedContent | null
+  // Enhanced Integration Actions
+  initializeStores: () => Promise<void>
+  syncWithOnboarding: () => void
+  syncWithDataBridge: () => void
+  setOnboardingData: (data: OnboardingData) => void
+  setTrainingData: (data: TrainingData) => void
+  
+  // Cross-Store Communication
+  handleOnboardingComplete: (data: OnboardingData) => Promise<void>
+  handleTrainingDataGenerated: (data: TrainingData) => void
+  getIntegratedProgress: () => Progress
   
   // Computed getters
   getUpcomingDeadlines: () => Subject[]
@@ -114,7 +134,10 @@ const initialState = {
   lastActivityDate: null,
   flashcardsReviewed: 0,
   recentAchievements: [] as string[],
-  generatedContent: null
+  onboardingData: null,
+  trainingData: null,
+  storesInitialized: false,
+  lastSyncTimestamp: null
 }
 
 /**
@@ -181,10 +204,142 @@ export const useExamStore = create<ExamStore>()(
         completeOnboarding: () => set({ onboardingCompleted: true }, false, 'completeOnboarding'),
         setOnboardingCompleted: (completed) => set({ onboardingCompleted: completed }, false, 'setOnboardingCompleted'),
         
-        // DataBridge Content Generation (V5 Onboarding)
-        storeGeneratedContent: (content) => set({ generatedContent: content }, false, 'storeGeneratedContent'),
-        clearGeneratedContent: () => set({ generatedContent: null }, false, 'clearGeneratedContent'),
-        getGeneratedContent: () => get().generatedContent,
+        // Enhanced Integration Actions
+        initializeStores: async () => {
+          const state = get()
+          if (state.storesInitialized) return
+          
+          try {
+            // Initialize cross-store communication
+            set({ storesInitialized: true, lastSyncTimestamp: new Date() }, false, 'initializeStores')
+            
+            // Sync with other stores
+            get().syncWithOnboarding()
+            get().syncWithDataBridge()
+            
+          } catch (error) {
+            console.error('Failed to initialize stores:', error)
+            set({ storesInitialized: false }, false, 'initializeStores:error')
+          }
+        },
+
+        syncWithOnboarding: () => {
+          // Get onboarding data if available
+          const onboardingStore = useOnboardingStore.getState()
+          const onboardingData = onboardingStore.exportData()
+          
+          if (onboardingData) {
+            set({ onboardingData, lastSyncTimestamp: new Date() }, false, 'syncWithOnboarding')
+            
+            // Update subjects based on onboarding data
+            if (onboardingData.subject && !get().subjects.find(s => s.name === onboardingData.subject)) {
+              const newSubject: Subject = {
+                id: `subject_${Date.now()}`,
+                name: onboardingData.subject,
+                description: `Generated from onboarding`,
+                emoji: onboardingData.subjectEmoji,
+                examDate: new Date(onboardingData.examDate),
+                estimatedHours: onboardingData.daysToExam * 2, // Rough estimate
+                createdAt: new Date()
+              }
+              
+              get().addSubject(newSubject)
+              get().setCurrentSubject(newSubject)
+            }
+          }
+        },
+
+        syncWithDataBridge: () => {
+          // Get training data from DataBridge
+          const dataBridgeStore = useDataBridgeStore.getState()
+          const trainingData = dataBridgeStore.trainingData[0] // Get latest
+          
+          if (trainingData) {
+            set({ trainingData, lastSyncTimestamp: new Date() }, false, 'syncWithDataBridge')
+          }
+        },
+
+        setOnboardingData: (data) => {
+          set({ onboardingData: data, lastSyncTimestamp: new Date() }, false, 'setOnboardingData')
+        },
+
+        setTrainingData: (data) => {
+          set({ trainingData: data, lastSyncTimestamp: new Date() }, false, 'setTrainingData')
+        },
+
+        handleOnboardingComplete: async (data) => {
+          // Store onboarding data
+          get().setOnboardingData(data)
+          
+          // Mark onboarding as completed
+          get().completeOnboarding()
+          
+          // Generate training data via DataBridge
+          const dataBridgeStore = useDataBridgeStore.getState()
+          try {
+            const trainingData = await dataBridgeStore.generateTrainingData(data)
+            get().handleTrainingDataGenerated(trainingData)
+          } catch (error) {
+            console.error('Failed to generate training data:', error)
+          }
+          
+          // Update progress
+          const currentProgress = get().progress || {
+            sessionsCompleted: 0,
+            totalStudyTime: 0,
+            streakCount: 0,
+            lastActivity: new Date(),
+            weeklyGoal: 600,
+            weeklyProgress: 0
+          }
+          
+          get().updateProgress({
+            ...currentProgress,
+            lastActivity: new Date()
+          })
+        },
+
+        handleTrainingDataGenerated: (data) => {
+          get().setTrainingData(data)
+          
+          // Could trigger additional actions like:
+          // - Generate initial flashcards
+          // - Create study plan
+          // - Set up learning pathways
+        },
+
+        getIntegratedProgress: () => {
+          const state = get()
+          const baseProgress = state.progress || {
+            sessionsCompleted: 0,
+            totalStudyTime: 0,
+            streakCount: state.streakCount,
+            lastActivity: new Date(),
+            weeklyGoal: 600,
+            weeklyProgress: 0
+          }
+          
+          // Enhance with onboarding and training data insights
+          let enhancedProgress = { ...baseProgress }
+          
+          if (state.onboardingData) {
+            // Add insights from onboarding
+            enhancedProgress = {
+              ...enhancedProgress,
+              // Could add onboarding-specific metrics
+            }
+          }
+          
+          if (state.trainingData) {
+            // Add insights from training data
+            enhancedProgress = {
+              ...enhancedProgress,
+              // Could add training data quality metrics
+            }
+          }
+          
+          return enhancedProgress
+        },
         
         // Study Session Management
         addScheduledSession: (sessionData) => set((state) => {

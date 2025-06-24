@@ -273,6 +273,7 @@ export interface TemplateVariable {
   name: string
   type: VariableType
   description: string
+  required?: boolean
   defaultValue?: any
   constraints?: VariableConstraints
 }
@@ -576,3 +577,57 @@ export type DataIssueType =
   | 'outdated_content' 
   | 'low_quality_source' 
   | 'insufficient_coverage'
+
+// Quality Reporting Types
+export interface QualityReport {
+  contentId: string
+  overallScore: number
+  quality: ContentQuality
+  recommendations: string[]
+  issues: QualityIssue[]
+  generatedAt: Date
+}
+
+// Analytics Types
+export interface AnalyticsData {
+  processingStats: ProcessingStats
+  qualityMetrics: QualityMetrics
+  userEngagement: EngagementMetrics
+  systemPerformance: PerformanceMetrics
+  trends: TrendData[]
+}
+
+export interface ProcessingStats {
+  totalContentProcessed: number
+  averageProcessingTime: number
+  successRate: number
+  errorRate: number
+  fallbackUsage: number
+}
+
+export interface QualityMetrics {
+  averageQualityScore: number
+  qualityDistribution: Record<string, number>
+  topIssues: QualityIssue[]
+  improvementTrends: number[]
+}
+
+export interface EngagementMetrics {
+  activeUsers: number
+  contentViews: number
+  studySessionDuration: number
+  completionRates: Record<string, number>
+}
+
+export interface PerformanceMetrics {
+  responseTime: number
+  throughput: number
+  resourceUsage: number
+  errorCounts: Record<string, number>
+}
+
+export interface TrendData {
+  metric: string
+  timeSeriesData: Array<{ timestamp: Date; value: number }>
+  trend: 'increasing' | 'decreasing' | 'stable'
+}
